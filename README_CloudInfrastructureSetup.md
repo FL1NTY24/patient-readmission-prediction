@@ -98,13 +98,11 @@ main.tf:
          Environment = "dev"
        }
      }
-
      # Setting S3 bucket ACL to private
      resource "aws_s3_bucket_acl" "readmission_bucket_acl" {
        bucket = aws_s3_bucket.readmission_bucket.id
        acl    = "private"
      }
-
      # Uploading the dataset to the S3 bucket
      resource "aws_s3_object" "dataset" {
        bucket = aws_s3_bucket.readmission_bucket.id
@@ -132,7 +130,6 @@ provider "aws" {
        skip_requesting_account_id  = var.localstack_enabled
        skip_metadata_api_check     = var.localstack_enabled
      }
-
      variable "localstack_enabled" {
        description = "Whether to use LocalStack for local testing"
        type        = bool
