@@ -90,6 +90,11 @@ This section outlines the cloud infrastructure setup for the project. The infras
 
 - Enter Access Key ID, Secret Access Key, region (us-east-1), and output format (json).
 
+- Start LocalStack for test:
+   ```powershell
+   localstack start -d
+   ```
+   
 - Test:
    ```powershell
    aws s3 ls
