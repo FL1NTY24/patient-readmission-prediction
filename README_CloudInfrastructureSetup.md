@@ -62,16 +62,17 @@ This section outlines the cloud infrastructure setup for the project. The infras
    pip --version
    ```
 
-- Install:
+- Install LocalStack and AWS CLI Local:
    ```powershell
-   pip install localstack --user
+   py -m pip install localstack awscli-local --user
    ```
 
 - Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Roaming\Python\Python313\Scripts).
 
-- Verify:
+- Verify installations:
    ```powershell
    localstack --version
+   awslocal --version
    ```
 
 5. **Install and Configure AWS CLI**:
