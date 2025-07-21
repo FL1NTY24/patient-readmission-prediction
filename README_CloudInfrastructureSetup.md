@@ -1,172 +1,211 @@
-# Summary of executed PowerShell Commands for Cloud Setup
+## Cloud Setup
 
-# 1. Installed and Configured WSL2 (for Docker)
+This section outlines the cloud infrastructure setup for the project. The infrastructure is provisioned using **Terraform** (Infrastructure as Code) and supports:
+- **S3**: Stores the dataset (`diabetes_data.csv`) and MLflow artifacts.
+- **ECS**: Hosts the FastAPI service for model deployment (completed in the **Model Deployment** step).
+- **SNS**: Sends monitoring alerts for data drift or model performance issues.
+- **LocalStack**: Simulates AWS services locally for cost-free development and testing.
+- **AWS Free Tier**: Used for a final demo, with resources terminated to ensure zero cost.
 
-Installed WSL2 and Virtual Machine Platform:
+**Terraform** scripts in the `infrastructure/` directory provision all resources. **LocalStack** is used for local testing, and the **AWS Free Tier** is used for a short demo deployment.
 
-wsl --install
+### Prerequisites
+- **Python**: 3.9 (verified with `python --version`).
+- **Docker Desktop**: Configured with WSL2 integration (verified with `docker --version`).
+- **Terraform**: ~1.9.4 (verified with `terraform -version`).
+- **LocalStack**: Installed via `pip install localstack --user` (verified with `localstack --version`).
+- **AWS CLI**: Installed and configured with IAM user permissions for S3, ECS, and SNS (verified with `aws --version`).
+- **WSL2**: Installed on Windows for Docker support (verified with `wsl --version`).
+- **GitHub Repository**: Initialized with the project structure.
 
-wsl --set-default-version 2
+### Setup Instructions
+1. **Install WSL2 (Windows)**:
+   ```powershell
+   wsl --install
+   wsl --set-default-version 2
+   wsl --install -d Ubuntu
+   wsl --update
+   wsl --version
+   wsl -l -v
+Install Docker Desktop:
+Download from docker.com and install.
+Enable WSL2 integration in Docker Desktop Settings > Resources > WSL Integration.
+Verify:
+powershell
 
-Installed Ubuntu:
+Collapse
 
-wsl --install -d Ubuntu
+Wrap
 
-Updated WSL:
-
-wsl --update
-
-Verified:
-
-wsl --version
-
-wsl -l -v
-
-# 2. Installed Docker Desktop
-
-Downloaded from docker.com and installed manually.
-Configured WSL2 integration in Docker Desktop Settings > Resources > WSL Integration.
-
-Verified:
-
+Copy
 docker --version
-
 docker run hello-world
-
 docker-compose --version
+Install Terraform:
+Download terraform_1.9.4_windows_amd64.zip from terraform.io.
+Unzip and move terraform.exe to C:\Program Files\Terraform.
+Add C:\Program Files\Terraform to System PATH.
+Verify:
+powershell
 
-# 3. Installed Terraform
-Downloaded from terraform.io/downloads (e.g., terraform_1.9.4_windows_amd64.zip).
-Unzipped and moved terraform.exe to C:\Program Files\Terraform.
+Collapse
 
-Added to PATH (manual via System > Environment Variables > Path)
+Wrap
 
-Verified:
-
+Copy
 terraform -version
+Install LocalStack:
+Verify Python and pip:
+powershell
 
-# 4. Installed LocalStack
+Collapse
 
-Verified Python and pip:
+Wrap
 
+Copy
 python --version
-
 pip --version
+Install:
+powershell
 
-Installed LocalStack:
+Collapse
 
+Wrap
+
+Copy
 pip install localstack --user
+Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Roaming\Python\Python313\Scripts).
+Verify:
+powershell
 
-Added Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Roaming\Python\Python313\Scripts):
+Collapse
 
-Verified:
+Wrap
 
+Copy
 localstack --version
+Install and Configure AWS CLI:
+Download from aws.amazon.com/cli and install via .msi.
+Verify:
+powershell
 
-Tested with Docker running:
+Collapse
 
-localstack start -d
+Wrap
 
-localstack stop
-
-# 5. Installed and Configured AWS CLI
-
-Installed (download from aws.amazon.com/cli, run .msi)
-
-Verified:
+Copy
 aws --version
+Configure with IAM user credentials (GabrielFlint24) with AmazonS3FullAccess, AmazonECS_FullAccess, and AmazonSNSFullAccess:
+powershell
 
-Configured:
+Collapse
 
+Wrap
+
+Copy
 aws configure
+Enter Access Key ID, Secret Access Key, region (us-east-1), and output format (json).
+Test:
+powershell
 
-Entered: Required information (Access keys + region etc)
+Collapse
 
-Tested (after adding S3 permissions to IAM user GabrielFlint24):
+Wrap
 
+Copy
 aws s3 ls
+Set Up Terraform Scripts:
+Scripts are located in infrastructure/:
+main.tf: Provisions S3 bucket, ECS cluster, and SNS topic.
+variables.tf: Defines variables (e.g., bucket_name, ecs_cluster_name, sns_topic_name).
+outputs.tf: Outputs resource names/ARNs.
+provider.tf: Configures AWS provider with LocalStack toggle.
+Ensure data/diabetes_data.csv exists in the data/ directory.
+Test with LocalStack:
+Start LocalStack:
+powershell
 
-# 6. Created Terraform Scripts
+Collapse
 
-main.tf:
+Wrap
 
-resource "aws_s3_bucket" "readmission_bucket" {
-  bucket = var.bucket_name
-  tags = {
-    Name        = "readmission-bucket"
-    Environment = "dev"
-  }
-}
-resource "aws_s3_bucket_acl" "readmission_bucket_acl" {
-  bucket = aws_s3_bucket.readmission_bucket.id
-  acl    = "private"
-}
-resource "aws_s3_object" "dataset" {
-  bucket = aws_s3_bucket.readmission_bucket.id
-  key    = "data/diabetes_data.csv"
-  source = "../data/diabetes_data.csv"
-  tags = {
-    Name = "diabetes-dataset"
-  }
-}
-resource "aws_ecs_cluster" "api_cluster" {
-  name = var.ecs_cluster_name
-  tags = {
-    Name        = "readmission-api-cluster"
-    Environment = "dev"
-  }
-}
-resource "aws_sns_topic" "monitoring_alerts" {
-  name = var.sns_topic_name
-  tags = {
-    Name        = "readmission-monitoring-alerts"
-    Environment = "dev"
-  }
-}
+Copy
+localstack start -d
+Navigate to infrastructure/:
+powershell
 
-outputs.tf:
+Collapse
 
-output "s3_bucket_name" {
-  value = aws_s3_bucket.readmission_bucket.bucket
-}
-output "ecs_cluster_name" {
-  value = aws_ecs_cluster.api_cluster.name
-}
-output "sns_topic_arn" {
-  value = aws_sns_topic.monitoring_alerts.arn
-}
+Wrap
 
-provider.tf:
+Copy
+cd patient-readmission-prediction/infrastructure
+Initialize Terraform:
+powershell
 
-provider "aws" {
-       region = "us-east-1"
-       endpoints {
-         s3 = var.localstack_enabled ? "http://localhost:4566" : null
-       }
-       skip_credentials_validation = var.localstack_enabled
-       skip_requesting_account_id  = var.localstack_enabled
-       skip_metadata_api_check     = var.localstack_enabled
-     }
-     variable "localstack_enabled" {
-       description = "Whether to use LocalStack for local testing"
-       type        = bool
-       default     = true
-     }
+Collapse
 
-variables.tf:
+Wrap
 
-variable "bucket_name" {
-  description = "Name of the S3 bucket"
-  type        = string
-  default     = "readmission-bucket"
-}
-variable "ecs_cluster_name" {
-  description = "Name of the ECS cluster"
-  type        = string
-  default     = "readmission-api-cluster"
-}
-variable "sns_topic_name" {
-  description = "Name of the SNS topic"
-  type        = string
-  default     = "readmission-monitoring-alerts"
-}
+Copy
+terraform init
+Apply Terraform:
+powershell
+
+Collapse
+
+Wrap
+
+Copy
+terraform apply -var="localstack_enabled=true" -auto-approve
+Verify resources:
+powershell
+
+Collapse
+
+Wrap
+
+Copy
+awslocal s3 ls s3://readmission-bucket/
+awslocal ecs list-clusters
+awslocal sns list-topics
+Deploy to AWS Free Tier:
+Ensure AWS CLI is configured:
+powershell
+
+Collapse
+
+Wrap
+
+Copy
+aws configure
+Apply Terraform for AWS:
+powershell
+
+Collapse
+
+Wrap
+
+Copy
+terraform init
+terraform apply -var="localstack_enabled=false" -auto-approve
+Verify resources:
+powershell
+
+Collapse
+
+Wrap
+
+Copy
+aws s3 ls s3://readmission-bucket/
+aws ecs list-clusters
+aws sns list-topics
+Terminate resources to avoid charges:
+powershell
+
+Collapse
+
+Wrap
+
+Copy
+terraform destroy -var="localstack_enabled=false" -auto-approve
