@@ -1,19 +1,28 @@
-# S3 bucket for storing dataset and MLflow artifacts
+variable "bucket_name" {
+  default = "readmission-bucket"
+}
+
+variable "ecs_cluster_name" {
+  default = "readmission-api-cluster"
+}
+
+variable "sns_topic_name" {
+  default = "readmission-monitoring-alerts"
+}
+
 resource "aws_s3_bucket" "readmission_bucket" {
   bucket = var.bucket_name
   tags = {
-    Name        = "readmission-bucket"
+    Name        = var.bucket_name
     Environment = "dev"
   }
 }
 
-# S3 bucket ACL to private
 resource "aws_s3_bucket_acl" "readmission_bucket_acl" {
   bucket = aws_s3_bucket.readmission_bucket.id
   acl    = "private"
 }
 
-# Upload dataset to S3
 resource "aws_s3_object" "dataset" {
   bucket = aws_s3_bucket.readmission_bucket.id
   key    = "data/diabetes_data.csv"
@@ -23,20 +32,19 @@ resource "aws_s3_object" "dataset" {
   }
 }
 
-# ECS cluster for FastAPI deployment
-resource "aws_ecs_cluster" "api_cluster" {
-  name = var.ecs_cluster_name
+resource "aws_sns_topic" "monitoring_alerts" {
+  name = var.sns_topic_name
   tags = {
-    Name        = "readmission-api-cluster"
+    Name        = var.sns_topic_name
     Environment = "dev"
   }
 }
 
-# SNS topic for monitoring alerts
-resource "aws_sns_topic" "monitoring_alerts" {
-  name = var.sns_topic_name
+resource "aws_ecs_cluster" "api_cluster" {
+  count = var.localstack_enabled ? 0 : 1  # Skip ECS in LocalStack
+  name  = var.ecs_cluster_name
   tags = {
-    Name        = "readmission-monitoring-alerts"
+    Name        = var.ecs_cluster_name
     Environment = "dev"
   }
 }
