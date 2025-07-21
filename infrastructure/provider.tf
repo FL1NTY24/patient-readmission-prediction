@@ -1,8 +1,3 @@
-variable "localstack_enabled" {
-  type    = bool
-  default = false
-}
-
 provider "aws" {
   region                      = "us-east-1"
   access_key                  = var.localstack_enabled ? "test" : null
