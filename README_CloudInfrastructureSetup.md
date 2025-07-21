@@ -30,118 +30,118 @@ This section outlines the cloud infrastructure setup for the project. The infras
    
 2. **Install Docker Desktop**:
    
-Download from docker.com and install.
+   Download from docker.com and install.
 
-Enable WSL2 integration in Docker Desktop Settings > Resources > WSL Integration.
+   Enable WSL2 integration in Docker Desktop Settings > Resources > WSL Integration.
 
-Verify:
+   Verify:
    ```powershell
    docker --version
    docker run hello-world
    docker-compose --version
 
-3.  **Install Terraform:**:
+3. **Install Terraform**::
 
-Download terraform_1.9.4_windows_amd64.zip from terraform.io.
+   Download terraform_1.9.4_windows_amd64.zip from terraform.io.
 
-Unzip and move terraform.exe to C:\Program Files\Terraform.
+   Unzip and move terraform.exe to C:\Program Files\Terraform.
 
-Add C:\Program Files\Terraform to System PATH.
+   Add C:\Program Files\Terraform to System PATH.
 
-Verify:
-```powershell
-terraform -version
+   Verify:
+   ```powershell
+   terraform -version
 
-Install LocalStack:
+4. **Install LocalStack**:
 
-Verify Python and pip:
-```powershell
-python --version
-pip --version
+   Verify Python and pip:
+   ```powershell
+   python --version
+   pip --version
 
-Install:
-```powershell
-pip install localstack --user
+   Install:
+   ```powershell
+   pip install localstack --user
 
-Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Roaming\Python\Python313\Scripts).
+   Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Roaming\Python\Python313\Scripts).
 
-Verify:
-```powershell
-localstack --version
+   Verify:
+   ```powershell
+   localstack --version
 
-Install and Configure AWS CLI:
+5. **Install and Configure AWS CLI**:
 
-Download from aws.amazon.com/cli and install via .msi.
+   Download from aws.amazon.com/cli and install via .msi.
 
-Verify:
-```powershell
-aws --version
+   Verify:
+   ```powershell
+   aws --version
 
-Configure with IAM user credentials with AmazonS3FullAccess, AmazonECS_FullAccess, and AmazonSNSFullAccess:
-```powershell
-aws configure
+   Configure with IAM user credentials with AmazonS3FullAccess, AmazonECS_FullAccess, and AmazonSNSFullAccess:
+   ```powershell
+   aws configure
 
-Enter Access Key ID, Secret Access Key, region (us-east-1), and output format (json).
+   Enter Access Key ID, Secret Access Key, region (us-east-1), and output format (json).
 
-Test:
-```powershell
-aws s3 ls
+   Test:
+   ```powershell
+   aws s3 ls
 
-Set Up Terraform Scripts:
+6. **Set Up Terraform Scripts**:
 
-Scripts are located in infrastructure/:
+   Scripts are located in infrastructure/:
 
-main.tf: Provisions S3 bucket, ECS cluster, and SNS topic.
+   main.tf: Provisions S3 bucket, ECS cluster, and SNS topic.
 
-variables.tf: Defines variables (e.g., bucket_name, ecs_cluster_name, sns_topic_name).
+   variables.tf: Defines variables (e.g., bucket_name, ecs_cluster_name, sns_topic_name).
 
-outputs.tf: Outputs resource names/ARNs.
+   outputs.tf: Outputs resource names/ARNs.
 
-provider.tf: Configures AWS provider with LocalStack toggle.
+   provider.tf: Configures AWS provider with LocalStack toggle.
 
-Ensure data/diabetes_data.csv exists in the data/ directory.
+   Ensure data/diabetes_data.csv exists in the data/ directory.
 
-Test with LocalStack:
+7. **Test with LocalStack**:
 
-Start LocalStack:
-```powershell
-localstack start -d
+   Start LocalStack:
+   ```powershell
+   localstack start -d
 
-Navigate to infrastructure/:
-```powershell
-cd patient-readmission-prediction/infrastructure
+   Navigate to infrastructure/:
+   ```powershell
+   cd patient-readmission-prediction/infrastructure
 
-Initialize Terraform:
-```powershell
-terraform init
+   Initialize Terraform:
+   ```powershell
+   terraform init
 
-Apply Terraform:
-```powershell
-terraform apply -var="localstack_enabled=true" -auto-approve
+   Apply Terraform:
+   ```powershell
+   terraform apply -var="localstack_enabled=true" -auto-approve
 
-Verify resources:
-```powershell
-awslocal s3 ls s3://readmission-bucket/
-awslocal ecs list-clusters
-awslocal sns list-topics
+   Verify resources:
+   ```powershell
+   awslocal s3 ls s3://readmission-bucket/
+   awslocal ecs list-clusters
+   awslocal sns list-topics
 
-Deploy to AWS Free Tier:
+8. **Deploy to AWS Free Tier**:
 
-Ensure AWS CLI is configured:
-```powershell
-aws configure
+   Ensure AWS CLI is configured:
+   ```powershell
+   aws configure
 
-Apply Terraform for AWS:
-```powershell
-terraform init
-terraform apply -var="localstack_enabled=false" -auto-approve
+   Apply Terraform for AWS:
+   ```powershell
+   terraform init
+   terraform apply -var="localstack_enabled=false" -auto-approve
 
-Verify resources:
-```powershell
-aws s3 ls s3://readmission-bucket/
-aws ecs list-clusters
-aws sns list-topics
+   Verify resources:
+   ```powershell
+   aws s3 ls s3://readmission-bucket/
+   aws ecs list-clusters
+   aws sns list-topics
 
-Terminate resources to avoid charges:
-```powershell
-terraform destroy -var="localstack_enabled=false" -auto-approve
+   Terminate resources to avoid charges:
+   ```powershell
+   terraform destroy -var="localstack_enabled=false" -auto-approve
