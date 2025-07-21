@@ -35,10 +35,10 @@ Download from docker.com and install.
 Enable WSL2 integration in Docker Desktop Settings > Resources > WSL Integration.
 
 Verify:
-```powershell
-docker --version
-docker run hello-world
-docker-compose --version
+   ```powershell
+   docker --version
+   docker run hello-world
+   docker-compose --version
 
 3.  **Install Terraform:**:
 
