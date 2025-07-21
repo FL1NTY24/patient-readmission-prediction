@@ -146,27 +146,7 @@ This section outlines the cloud infrastructure setup for the project. The infras
    awslocal ecs list-clusters
    awslocal sns list-topics
    ```
-
-8. **Deploy to AWS Free Tier**:
-
-- Ensure AWS CLI is configured:
-   ```powershell
-   aws configure
-   ```
-
-- Apply Terraform for AWS:
-   ```powershell
-   terraform init
-   terraform apply -var="localstack_enabled=false" -auto-approve
-   ```
-
-- Verify resources:
-   ```powershell
-   aws s3 ls s3://readmission-bucket/
-   aws ecs list-clusters
-   aws sns list-topics
-   ```
-
+   
 - Terminate resources to avoid charges:
    ```powershell
    terraform destroy -var="localstack_enabled=false" -auto-approve
