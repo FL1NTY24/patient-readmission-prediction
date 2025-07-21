@@ -100,6 +100,10 @@ This section outlines the cloud infrastructure setup for the project. The infras
 
    Ensure data/diabetes_data.csv exists in the data/ directory.
 
+- Verify dataset exists:
+    ```powershell
+   dir data\diabetes_data.csv
+
 7. **Test with LocalStack**:
 
 - Start LocalStack:
