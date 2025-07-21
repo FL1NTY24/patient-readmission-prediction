@@ -27,7 +27,8 @@ This section outlines the cloud infrastructure setup for the project. The infras
    wsl --update
    wsl --version
    wsl -l -v
-Install Docker Desktop:
+   
+2. **Install Docker Desktop**:
 Download from docker.com and install.
 Enable WSL2 integration in Docker Desktop Settings > Resources > WSL Integration.
 Verify:
