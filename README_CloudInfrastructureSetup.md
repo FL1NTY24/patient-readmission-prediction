@@ -27,6 +27,7 @@ This section outlines the cloud infrastructure setup for the project. The infras
    wsl --update
    wsl --version
    wsl -l -v
+   ```
    
 2. **Install Docker Desktop**:
    
@@ -39,6 +40,7 @@ This section outlines the cloud infrastructure setup for the project. The infras
    docker --version
    docker run hello-world
    docker-compose --version
+   ```
 
 3. **Install Terraform**::
 - Download terraform_1.9.4_windows_amd64.zip from terraform.io.
@@ -50,6 +52,7 @@ This section outlines the cloud infrastructure setup for the project. The infras
 - Verify:
    ```powershell
    terraform -version
+   ```
 
 4. **Install LocalStack**:
 
@@ -57,16 +60,19 @@ This section outlines the cloud infrastructure setup for the project. The infras
    ```powershell
    python --version
    pip --version
+   ```
 
 - Install:
    ```powershell
    pip install localstack --user
+   ```
 
 - Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Roaming\Python\Python313\Scripts).
 
 - Verify:
    ```powershell
    localstack --version
+   ```
 
 5. **Install and Configure AWS CLI**:
 
@@ -75,16 +81,19 @@ This section outlines the cloud infrastructure setup for the project. The infras
 - Verify:
    ```powershell
    aws --version
+   ```
 
 - Configure with IAM user credentials with AmazonS3FullAccess, AmazonECS_FullAccess, and AmazonSNSFullAccess:
    ```powershell
    aws configure
+   ```
 
 - Enter Access Key ID, Secret Access Key, region (us-east-1), and output format (json).
 
 - Test:
    ```powershell
    aws s3 ls
+   ```
 
 6. **Set Up Terraform Scripts**:
 
@@ -98,53 +107,61 @@ This section outlines the cloud infrastructure setup for the project. The infras
 
    provider.tf: Configures AWS provider with LocalStack toggle.
 
-   Ensure data/diabetes_data.csv exists in the data/ directory.
-
-- Verify dataset exists:
+- Ensure data/diabetes_data.csv exists in the data/ directory.
     ```powershell
    dir data\diabetes_data.csv
+    ```
 
 7. **Test with LocalStack**:
 
 - Start LocalStack:
    ```powershell
    localstack start -d
+   ```
 
 - Navigate to infrastructure/:
    ```powershell
    cd patient-readmission-prediction/infrastructure
+   ```
 
 - Initialize Terraform:
    ```powershell
    terraform init
+   ```
 
 - Apply Terraform:
    ```powershell
    terraform apply -var="localstack_enabled=true" -auto-approve
+   ```
 
 - Verify resources:
    ```powershell
    awslocal s3 ls s3://readmission-bucket/
    awslocal ecs list-clusters
    awslocal sns list-topics
+   ```
 
 8. **Deploy to AWS Free Tier**:
 
 - Ensure AWS CLI is configured:
    ```powershell
    aws configure
+   ```
 
 - Apply Terraform for AWS:
    ```powershell
    terraform init
    terraform apply -var="localstack_enabled=false" -auto-approve
+   ```
 
 - Verify resources:
    ```powershell
    aws s3 ls s3://readmission-bucket/
    aws ecs list-clusters
    aws sns list-topics
+   ```
 
 - Terminate resources to avoid charges:
    ```powershell
    terraform destroy -var="localstack_enabled=false" -auto-approve
+   ```
