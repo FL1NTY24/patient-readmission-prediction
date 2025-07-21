@@ -89,7 +89,8 @@ aws s3 ls
 # 6. Created Terraform Scripts
 
 main.tf:
-Defining the S3 bucket for storing dataset and MLflow artifacts
+
+#Defining the S3 bucket for storing dataset and MLflow artifacts
      resource "aws_s3_bucket" "readmission_bucket" {
        bucket = var.bucket_name
        tags = {
@@ -115,11 +116,13 @@ Defining the S3 bucket for storing dataset and MLflow artifacts
      }
 
 outputs.tf:
+
 output "s3_bucket_name" {
        value = aws_s3_bucket.readmission_bucket.bucket
      }
 
 provider.tf:
+
 provider "aws" {
        region = "us-east-1"
        endpoints {
@@ -137,6 +140,7 @@ provider "aws" {
      }
 
 variables.tf:
+
 variable "bucket_name" {
        description = "Name of the S3 bucket"
        type        = string
