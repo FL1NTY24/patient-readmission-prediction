@@ -40,7 +40,7 @@ docker --version
 docker run hello-world
 docker-compose --version
 
-Install Terraform:
+3.  **Install Terraform:**:
 
 Download terraform_1.9.4_windows_amd64.zip from terraform.io.
 
