@@ -90,34 +90,51 @@ aws s3 ls
 
 main.tf:
 
-#Defining the S3 bucket for storing dataset and MLflow artifacts
-     resource "aws_s3_bucket" "readmission_bucket" {
-       bucket = var.bucket_name
-       tags = {
-         Name        = "readmission-bucket"
-         Environment = "dev"
-       }
-     }
-     # Setting S3 bucket ACL to private
-     resource "aws_s3_bucket_acl" "readmission_bucket_acl" {
-       bucket = aws_s3_bucket.readmission_bucket.id
-       acl    = "private"
-     }
-     # Uploading the dataset to the S3 bucket
-     resource "aws_s3_object" "dataset" {
-       bucket = aws_s3_bucket.readmission_bucket.id
-       key    = "data/diabetes_data.csv"
-       source = "../data/diabetes_data.csv"
-       tags = {
-         Name = "diabetes-dataset"
-       }
-     }
+resource "aws_s3_bucket" "readmission_bucket" {
+  bucket = var.bucket_name
+  tags = {
+    Name        = "readmission-bucket"
+    Environment = "dev"
+  }
+}
+resource "aws_s3_bucket_acl" "readmission_bucket_acl" {
+  bucket = aws_s3_bucket.readmission_bucket.id
+  acl    = "private"
+}
+resource "aws_s3_object" "dataset" {
+  bucket = aws_s3_bucket.readmission_bucket.id
+  key    = "data/diabetes_data.csv"
+  source = "../data/diabetes_data.csv"
+  tags = {
+    Name = "diabetes-dataset"
+  }
+}
+resource "aws_ecs_cluster" "api_cluster" {
+  name = var.ecs_cluster_name
+  tags = {
+    Name        = "readmission-api-cluster"
+    Environment = "dev"
+  }
+}
+resource "aws_sns_topic" "monitoring_alerts" {
+  name = var.sns_topic_name
+  tags = {
+    Name        = "readmission-monitoring-alerts"
+    Environment = "dev"
+  }
+}
 
 outputs.tf:
 
 output "s3_bucket_name" {
-       value = aws_s3_bucket.readmission_bucket.bucket
-     }
+  value = aws_s3_bucket.readmission_bucket.bucket
+}
+output "ecs_cluster_name" {
+  value = aws_ecs_cluster.api_cluster.name
+}
+output "sns_topic_arn" {
+  value = aws_sns_topic.monitoring_alerts.arn
+}
 
 provider.tf:
 
@@ -139,7 +156,17 @@ provider "aws" {
 variables.tf:
 
 variable "bucket_name" {
-       description = "Name of the S3 bucket"
-       type        = string
-       default     = "readmission-bucket"
-     }
+  description = "Name of the S3 bucket"
+  type        = string
+  default     = "readmission-bucket"
+}
+variable "ecs_cluster_name" {
+  description = "Name of the ECS cluster"
+  type        = string
+  default     = "readmission-api-cluster"
+}
+variable "sns_topic_name" {
+  description = "Name of the SNS topic"
+  type        = string
+  default     = "readmission-monitoring-alerts"
+}
