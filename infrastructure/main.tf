@@ -1,15 +1,3 @@
-variable "bucket_name" {
-  default = "readmission-bucket"
-}
-
-variable "ecs_cluster_name" {
-  default = "readmission-api-cluster"
-}
-
-variable "sns_topic_name" {
-  default = "readmission-monitoring-alerts"
-}
-
 resource "aws_s3_bucket" "readmission_bucket" {
   bucket = var.bucket_name
   tags = {
