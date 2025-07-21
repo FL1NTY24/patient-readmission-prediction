@@ -30,25 +30,24 @@ This section outlines the cloud infrastructure setup for the project. The infras
    
 2. **Install Docker Desktop**:
    
-   Download from docker.com and install.
+- Download from docker.com and install.
 
-   Enable WSL2 integration in Docker Desktop Settings > Resources > WSL Integration.
+- Enable WSL2 integration in Docker Desktop Settings > Resources > WSL Integration.
 
-   Verify:
+- Verify:
    ```powershell
    docker --version
    docker run hello-world
    docker-compose --version
 
 3. **Install Terraform**::
+- Download terraform_1.9.4_windows_amd64.zip from terraform.io.
 
-   Download terraform_1.9.4_windows_amd64.zip from terraform.io.
+- Unzip and move terraform.exe to C:\Program Files\Terraform.
 
-   Unzip and move terraform.exe to C:\Program Files\Terraform.
+- Add C:\Program Files\Terraform to System PATH.
 
-   Add C:\Program Files\Terraform to System PATH.
-
-   Verify:
+- Verify:
    ```powershell
    terraform -version
 
@@ -71,25 +70,25 @@ This section outlines the cloud infrastructure setup for the project. The infras
 
 5. **Install and Configure AWS CLI**:
 
-   Download from aws.amazon.com/cli and install via .msi.
+- Download from aws.amazon.com/cli and install via .msi.
 
-   Verify:
+- Verify:
    ```powershell
    aws --version
 
-   Configure with IAM user credentials with AmazonS3FullAccess, AmazonECS_FullAccess, and AmazonSNSFullAccess:
+- Configure with IAM user credentials with AmazonS3FullAccess, AmazonECS_FullAccess, and AmazonSNSFullAccess:
    ```powershell
    aws configure
 
-   Enter Access Key ID, Secret Access Key, region (us-east-1), and output format (json).
+- Enter Access Key ID, Secret Access Key, region (us-east-1), and output format (json).
 
-   Test:
+- Test:
    ```powershell
    aws s3 ls
 
 6. **Set Up Terraform Scripts**:
 
-   Scripts are located in infrastructure/:
+- Scripts are located in infrastructure/:
 
    main.tf: Provisions S3 bucket, ECS cluster, and SNS topic.
 
@@ -103,23 +102,23 @@ This section outlines the cloud infrastructure setup for the project. The infras
 
 7. **Test with LocalStack**:
 
-   Start LocalStack:
+- Start LocalStack:
    ```powershell
    localstack start -d
 
-   Navigate to infrastructure/:
+- Navigate to infrastructure/:
    ```powershell
    cd patient-readmission-prediction/infrastructure
 
-   Initialize Terraform:
+- Initialize Terraform:
    ```powershell
    terraform init
 
-   Apply Terraform:
+- Apply Terraform:
    ```powershell
    terraform apply -var="localstack_enabled=true" -auto-approve
 
-   Verify resources:
+- Verify resources:
    ```powershell
    awslocal s3 ls s3://readmission-bucket/
    awslocal ecs list-clusters
@@ -127,21 +126,21 @@ This section outlines the cloud infrastructure setup for the project. The infras
 
 8. **Deploy to AWS Free Tier**:
 
-   Ensure AWS CLI is configured:
+- Ensure AWS CLI is configured:
    ```powershell
    aws configure
 
-   Apply Terraform for AWS:
+- Apply Terraform for AWS:
    ```powershell
    terraform init
    terraform apply -var="localstack_enabled=false" -auto-approve
 
-   Verify resources:
+- Verify resources:
    ```powershell
    aws s3 ls s3://readmission-bucket/
    aws ecs list-clusters
    aws sns list-topics
 
-   Terminate resources to avoid charges:
+- Terminate resources to avoid charges:
    ```powershell
    terraform destroy -var="localstack_enabled=false" -auto-approve
