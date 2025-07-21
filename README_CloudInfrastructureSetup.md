@@ -31,13 +31,7 @@ Install Docker Desktop:
 Download from docker.com and install.
 Enable WSL2 integration in Docker Desktop Settings > Resources > WSL Integration.
 Verify:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 docker --version
 docker run hello-world
 docker-compose --version
@@ -46,73 +40,31 @@ Download terraform_1.9.4_windows_amd64.zip from terraform.io.
 Unzip and move terraform.exe to C:\Program Files\Terraform.
 Add C:\Program Files\Terraform to System PATH.
 Verify:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 terraform -version
 Install LocalStack:
 Verify Python and pip:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 python --version
 pip --version
 Install:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 pip install localstack --user
 Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Roaming\Python\Python313\Scripts).
 Verify:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 localstack --version
 Install and Configure AWS CLI:
 Download from aws.amazon.com/cli and install via .msi.
 Verify:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 aws --version
 Configure with IAM user credentials (GabrielFlint24) with AmazonS3FullAccess, AmazonECS_FullAccess, and AmazonSNSFullAccess:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 aws configure
 Enter Access Key ID, Secret Access Key, region (us-east-1), and output format (json).
 Test:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 aws s3 ls
 Set Up Terraform Scripts:
 Scripts are located in infrastructure/:
@@ -123,89 +75,35 @@ provider.tf: Configures AWS provider with LocalStack toggle.
 Ensure data/diabetes_data.csv exists in the data/ directory.
 Test with LocalStack:
 Start LocalStack:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 localstack start -d
 Navigate to infrastructure/:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 cd patient-readmission-prediction/infrastructure
 Initialize Terraform:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 terraform init
 Apply Terraform:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 terraform apply -var="localstack_enabled=true" -auto-approve
 Verify resources:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 awslocal s3 ls s3://readmission-bucket/
 awslocal ecs list-clusters
 awslocal sns list-topics
 Deploy to AWS Free Tier:
 Ensure AWS CLI is configured:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 aws configure
 Apply Terraform for AWS:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 terraform init
 terraform apply -var="localstack_enabled=false" -auto-approve
 Verify resources:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 aws s3 ls s3://readmission-bucket/
 aws ecs list-clusters
 aws sns list-topics
 Terminate resources to avoid charges:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 terraform destroy -var="localstack_enabled=false" -auto-approve
