@@ -85,3 +85,60 @@ Entered: Required information (Access keys + region etc)
 Tested (after adding S3 permissions to IAM user GabrielFlint24):
 
 aws s3 ls
+
+# 6. Created Terraform Scripts
+
+main.tf:
+Defining the S3 bucket for storing dataset and MLflow artifacts
+     resource "aws_s3_bucket" "readmission_bucket" {
+       bucket = var.bucket_name
+       tags = {
+         Name        = "readmission-bucket"
+         Environment = "dev"
+       }
+     }
+
+     # Setting S3 bucket ACL to private
+     resource "aws_s3_bucket_acl" "readmission_bucket_acl" {
+       bucket = aws_s3_bucket.readmission_bucket.id
+       acl    = "private"
+     }
+
+     # Uploading the dataset to the S3 bucket
+     resource "aws_s3_object" "dataset" {
+       bucket = aws_s3_bucket.readmission_bucket.id
+       key    = "data/diabetes_data.csv"
+       source = "../data/diabetes_data.csv"
+       tags = {
+         Name = "diabetes-dataset"
+       }
+     }
+
+outputs.tf:
+output "s3_bucket_name" {
+       value = aws_s3_bucket.readmission_bucket.bucket
+     }
+
+provider.tf:
+provider "aws" {
+       region = "us-east-1"
+       endpoints {
+         s3 = var.localstack_enabled ? "http://localhost:4566" : null
+       }
+       skip_credentials_validation = var.localstack_enabled
+       skip_requesting_account_id  = var.localstack_enabled
+       skip_metadata_api_check     = var.localstack_enabled
+     }
+
+     variable "localstack_enabled" {
+       description = "Whether to use LocalStack for local testing"
+       type        = bool
+       default     = true
+     }
+
+variables.tf:
+variable "bucket_name" {
+       description = "Name of the S3 bucket"
+       type        = string
+       default     = "readmission-bucket"
+     }
