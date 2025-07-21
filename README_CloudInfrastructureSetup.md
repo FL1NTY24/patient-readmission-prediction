@@ -54,18 +54,18 @@ This section outlines the cloud infrastructure setup for the project. The infras
 
 4. **Install LocalStack**:
 
-   Verify Python and pip:
+- Verify Python and pip:
    ```powershell
    python --version
    pip --version
 
-   Install:
+- Install:
    ```powershell
    pip install localstack --user
 
-   Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Roaming\Python\Python313\Scripts).
+- Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Roaming\Python\Python313\Scripts).
 
-   Verify:
+- Verify:
    ```powershell
    localstack --version
 
