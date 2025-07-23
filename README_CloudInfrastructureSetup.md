@@ -125,10 +125,15 @@ This section outlines the cloud infrastructure setup for the project. The infras
    localstack start -d
    ```
 
-- Navigate to infrastructure/:
+- Navigate to infrastructure:
    ```powershell
    cd patient-readmission-prediction/infrastructure
    ```
+
+- Set Environment Variable:
+  ```powershell
+  $env:AWS_S3_FORCE_PATH_STYLE = "true"
+  ```
 
 - Initialize Terraform:
    ```powershell
