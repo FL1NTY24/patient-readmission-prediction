@@ -1,4 +1,4 @@
-# ML-OPS-Project
+# ML OPS Project
 
 Smart Healthcare: Predicting Patient Readmission Risk
 
