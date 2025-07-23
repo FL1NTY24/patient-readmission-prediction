@@ -9,10 +9,12 @@ This section outlines the cloud infrastructure setup for the project. The infras
 
 **Terraform** scripts in the `infrastructure/` directory provision all resources. **LocalStack** is used for local testing, and the **AWS Free Tier** is used for a short demo deployment.
 
+Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled=true`, the ECS cluster is skipped (`ecs_cluster_name = null`). Use `localstack_enabled=false` with real AWS credentials for ECS deployment, which may incur costs.
+
 ### Prerequisites
-- **Python**: 3.9 (verified with `python --version`).
+- **Python**: 3.9.13 (verified with `python --version`).
 - **Docker Desktop**: Configured with WSL2 integration (verified with `docker --version`).
-- **Terraform**: ~1.9.4 (verified with `terraform -version`).
+- **Terraform**: 1.12.2 (verified with `terraform -version`). Optionally, upgrade to ~1.9.x for improved stability (download from https://www.terraform.io/downloads.html).
 - **LocalStack**: Installed via `pip install localstack --user` (verified with `localstack --version`).
 - **AWS CLI**: Installed and configured with IAM user permissions for S3, ECS, and SNS (verified with `aws --version`).
 - **WSL2**: Installed on Windows for Docker support (verified with `wsl --version`).
@@ -67,8 +69,8 @@ This section outlines the cloud infrastructure setup for the project. The infras
    py -m pip install localstack awscli
    ```
 
-- Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Roaming\Python\Python313\Scripts).
-
+- Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Local\Programs\Python\Python39\Scripts).
+  
 - Verify installations:
    ```powershell
    localstack --version
@@ -96,9 +98,10 @@ This section outlines the cloud infrastructure setup for the project. The infras
    localstack start -d
    ```
    
-- Test:
+- Test (ensure LocalStack is running and AWS_ENDPOINT_URL is set):
    ```powershell
-   aws s3 ls
+   $env:AWS_ENDPOINT_URL = "http://127.0.0.1:4566"
+   awslocal s3 ls
    ```
 
 6. **Set Up Terraform Scripts**:
@@ -138,7 +141,7 @@ This section outlines the cloud infrastructure setup for the project. The infras
    ```
 
 - Restart LocalStack with Explicit Configuration:
-To ensure LocalStack’s S3 service uses path-style addressing and is properly initialized, stop any existing container and start a new one with specific environment variables:
+  Stop any existing LocalStack container and start a new one with S3 and SNS services, ensuring path-style addressing for S3 compatibility.
    ```powershell
   docker ps
   docker stop <localstack_container_id>
@@ -173,11 +176,11 @@ Before running Terraform, verify that LocalStack’s S3 and SNS services are ope
 - Verify resources:
    ```powershell
    awslocal s3 ls s3://readmission-bucket/
-   awslocal ecs list-clusters
    awslocal sns list-topics
+   terraform output
    ```
    
-- Terminate resources to avoid charges:
+- Terminate LocalStack resources to clean up the local environment:
    ```powershell
-   terraform destroy -var="localstack_enabled=false" -auto-approve
+   terraform destroy -var="localstack_enabled=true" -auto-approve
    ```
