@@ -70,8 +70,7 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
    ```
 
 - Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Local\Programs\Python\Python39\Scripts).
-  https://www.google.com/search? 
-q=add+python+scripts+to+path+steps&rlz=1C1GCEU_enZA1127ZA1127&oq=add+python+scripts+to+path+steps&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQABiABDIMCAIQABgUGIcCGIAEMgcIAxAAGIAEMgcIBBAAGIAEMgcIBRAAGIAEMgcIBhAAGIAEMgcIBxAAGIAEMgcICBAAGIAEMgcICRAAGIAE0gEINjA0NWowajeoAgCwAgA&sourceid=chrome&ie=UTF-8
+  https://www.youtube.com/watch?v=oa7YR5GpJ0A
   
 - Verify installations:
    ```powershell
