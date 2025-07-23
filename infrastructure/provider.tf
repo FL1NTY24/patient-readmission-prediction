@@ -6,7 +6,7 @@ provider "aws" {
   skip_requesting_account_id  = var.localstack_enabled
   skip_metadata_api_check     = var.localstack_enabled
   endpoints {
-    s3  = var.localstack_enabled ? "http://localhost:4566" : null
-    sns = var.localstack_enabled ? "http://localhost:4566" : null
+    s3  = var.localstack_enabled ? "http://127.0.0.1:4566" : null
+    sns = var.localstack_enabled ? "http://127.0.0.1:4566" : null
   }
 }
