@@ -180,7 +180,7 @@ Before running Terraform, verify that LocalStack’s S3 and SNS services are ope
    terraform output
    ```
    
-- Terminate LocalStack resources to clean up the local environment:
+- Terminate LocalStack resources to clean up the local environment (Only terminate at the end of project):
    ```powershell
    terraform destroy -var="localstack_enabled=true" -auto-approve
    ```
