@@ -70,6 +70,7 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
    ```
 
 - Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Local\Programs\Python\Python39\Scripts).
+  
   https://www.youtube.com/watch?v=oa7YR5GpJ0A
   
 - Verify installations:
@@ -142,6 +143,7 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
    ```
 
 - Restart LocalStack with Explicit Configuration:
+  
   Stop any existing LocalStack container and start a new one with S3 and SNS services, ensuring path-style addressing for S3 compatibility.
    ```powershell
   docker ps
@@ -161,6 +163,7 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
   ```
 
 - Test LocalStack S3 and SNS Services:
+  
 Before running Terraform, verify that LocalStack’s S3 and SNS services are operational:
   ```powershell
   awslocal s3 mb s3://test-bucket
