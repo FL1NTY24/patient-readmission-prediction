@@ -45,3 +45,6 @@ I ensured reproducibility with a requirements.txt pinning dependencies (e.g., pa
 
 Best Practices:
 I implemented unit and integration tests with pytest, enforced code style with black and flake8, and used pre-commit hooks for consistency. A Makefile simplifies commands, and GitHub Actions handles CI/CD for automated testing and deployment.
+
+Note:
+All commands presented were ran on windows powershell.
