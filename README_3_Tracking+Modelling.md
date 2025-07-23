@@ -4,6 +4,17 @@
    ```powershell
    pip install mlflow scikit-learn pandas matplotlib seaborn
    ```
+- Requirements:
+  
+  mlflow==2.17.0
+  
+  scikit-learn==1.2.2
+  
+  pandas==1.5.3
+  
+  matplotlib==3.7.5
+  
+  seaborn==0.13.2
 
 - Verify:
   ```powershell
