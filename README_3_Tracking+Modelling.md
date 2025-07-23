@@ -1,5 +1,7 @@
 ## Experiment Tracking and Model Registry
 
+This section sets up MLflow to track experiments (logging parameters, metrics, and artifacts) and register the trained model, meeting the project’s experiment tracking and model registry requirements.
+
 1. **Install MLflow and Dependencies**:
    ```powershell
    pip install mlflow scikit-learn pandas matplotlib seaborn
