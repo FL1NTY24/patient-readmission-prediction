@@ -119,9 +119,9 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
    provider.tf: Configures AWS provider with LocalStack toggle.
 
 - Ensure data/diabetes_data.csv exists in the data/ directory.
-    ```powershell
+   ```powershell
    dir data\diabetes_data.csv
-    ```
+   ```
 
 7. **Test with LocalStack**:
 
@@ -146,35 +146,35 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
   
   Stop any existing LocalStack container and start a new one with S3 and SNS services, ensuring path-style addressing for S3 compatibility.
    ```powershell
-  docker ps
-  docker stop <localstack_container_id>
-  docker run -d -p 4566:4566 -p 4510-4559:4510-4559 --env SERVICES=s3,sns --env HOSTNAME_EXTERNAL=localhost --env S3_PATH_STYLE=1 localstack/localstack
-  ```
+   docker ps
+   docker stop <localstack_container_id>
+   docker run -d -p 4566:4566 -p 4510-4559:4510-4559 --env SERVICES=s3,sns --env HOSTNAME_EXTERNAL=localhost --env S3_PATH_STYLE=1 localstack/localstack
+   ```
 
 - Test Connectivity:
-  ```powershell
-  curl http://127.0.0.1:4566
-  ```
+   ```powershell
+   curl http://127.0.0.1:4566
+   ```
 
 - Set Environment Variable:
-  ```powershell
-  $env:AWS_S3_FORCE_PATH_STYLE = "true"
-  $env:AWS_ENDPOINT_URL = "http://127.0.0.1:4566"
-  ```
+   ```powershell
+   $env:AWS_S3_FORCE_PATH_STYLE = "true"
+   $env:AWS_ENDPOINT_URL = "http://127.0.0.1:4566"
+   ```
 
 - Test LocalStack S3 and SNS Services:
   
-Before running Terraform, verify that LocalStack’s S3 and SNS services are operational:
-  ```powershell
-  awslocal s3 mb s3://test-bucket
-  awslocal s3 ls
-  awslocal sns create-topic --name test-topic
-  awslocal sns list-topics
-  ```
+  Before running Terraform, verify that LocalStack’s S3 and SNS services are operational:
+   ```powershell
+   awslocal s3 mb s3://test-bucket
+   awslocal s3 ls
+   awslocal sns create-topic --name test-topic
+   awslocal sns list-topics
+   ```
 
 - Apply Terraform:
    ```powershell
-  terraform apply -var="localstack_enabled=true" -auto-approve
+   terraform apply -var="localstack_enabled=true" -auto-approve
    ```
 
 - Verify resources:
