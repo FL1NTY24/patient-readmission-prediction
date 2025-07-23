@@ -130,19 +130,44 @@ This section outlines the cloud infrastructure setup for the project. The infras
    cd patient-readmission-prediction/infrastructure
    ```
 
-- Set Environment Variable:
-  ```powershell
-  $env:AWS_S3_FORCE_PATH_STYLE = "true"
-  ```
+
 
 - Initialize Terraform:
    ```powershell
    terraform init
    ```
 
+- Restart LocalStack with Explicit Configuration:
+To ensure LocalStack’s S3 service uses path-style addressing and is properly initialized, stop any existing container and start a new one with specific environment variables:
+   ```powershell
+  docker ps
+  docker stop <localstack_container_id>
+  docker run -d -p 4566:4566 -p 4510-4559:4510-4559 --env SERVICES=s3,sns --env HOSTNAME_EXTERNAL=localhost --env S3_PATH_STYLE=1 localstack/localstack
+  ```
+
+- Test Connectivity:
+  ```powershell
+  curl http://127.0.0.1:4566
+  ```
+
+- Set Environment Variable:
+  ```powershell
+  $env:AWS_S3_FORCE_PATH_STYLE = "true"
+  $env:AWS_ENDPOINT_URL = "http://127.0.0.1:4566"
+  ```
+
+- Test LocalStack S3 and SNS Services:
+Before running Terraform, verify that LocalStack’s S3 and SNS services are operational:
+  ```powershell
+  awslocal s3 mb s3://test-bucket
+  awslocal s3 ls
+  awslocal sns create-topic --name test-topic
+  awslocal sns list-topics
+  ```
+
 - Apply Terraform:
    ```powershell
-   terraform apply -var="localstack_enabled=true" -auto-approve
+  terraform apply -var="localstack_enabled=true" -auto-approve
    ```
 
 - Verify resources:
