@@ -12,7 +12,7 @@
 
 2. **Start LocalStack (if not already running)**:
 
-   Ensure LocalStack is running for S3 artifact storage:
+- Ensure LocalStack is running for S3 artifact storage:
    ```powershell
    docker ps
    docker run -d -p 4566:4566 -p 4510-4559:4510-4559 --env SERVICES=s3,sns --env HOSTNAME_EXTERNAL=localhost --env S3_PATH_STYLE=1 localstack/localstack
@@ -37,6 +37,7 @@
 
 5. **Run the Training Script**:
 
+- The python training script can be found in the main github directory.
 - Execute the training script to log experiments and register the model:
    ```powershell
    cd C:\Users\GabrielF\patient-readmission-prediction
