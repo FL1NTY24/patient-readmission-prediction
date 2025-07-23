@@ -16,35 +16,35 @@ The dataset represents ten years (1999-2008) of clinical care at 130 US hospital
 
 # Key Components:
 
-Problem Statement:
+**Problem Statement**:
 I defined the challenge of hospital readmissions, focusing on their financial and health impacts. The model predicts readmission risk using patient data (demographics, medical history, hospital stay details) to prioritize interventions.
 
-Dataset:
+**Dataset**:
 I used the UCI Diabetes 130-Hospitals Dataset, featuring patient demographics, medical history, and a binary readmission label.
 
-Cloud Infrastructure:
+**Cloud Infrastructure**:
 I set up a cost-free infrastructure using LocalStack for local testing and AWS Free Tier for deployment. Using Terraform, I provisioned an S3 bucket for data/model storage, an EC2 t2.micro instance for MLflow (optional), an ECS cluster for FastAPI, and SNS for alerts. I tested locally with LocalStack and deployed to AWS for the final demo, terminating resources to avoid costs.
 
-Experiment Tracking:
+**Experiment Tracking**:
 I implemented MLflow with a local SQLite backend to track experiments, logging Random Forest hyperparameters (e.g., n_estimators, max_depth), metrics (AUC-ROC, precision, recall), and artifacts (model, confusion matrix). The best model is registered in the MLflow Model Registry.
 
-Workflow Orchestration:
+**Workflow Orchestration**:
 I built a Prefect pipeline to automate data preprocessing, model training, evaluation, and deployment to FastAPI (if AUC-ROC > 0.75). The pipeline runs locally with Prefect’s free-tier cloud for visualization and is scheduled for daily retraining.
 
-Model Training:
+**Model Training**:
 I trained a Random Forest Classifier using scikit-learn on the dataset (saved as diabetes_data.csv). The training pipeline is integrated with Prefect and MLflow for seamless execution and tracking.
 
-Model Deployment:
+**Model Deployment**:
 I deployed a FastAPI web service in a Docker container on AWS ECS (free tier). The API, defined in api.py, serves predictions and is tested locally with Docker before deployment. Usage instructions are provided in the README.
 
-Model Monitoring:
+**Model Monitoring**:
 I used Evidently AI to generate data drift and performance reports (e.g., AUC-ROC, patient age distribution shifts), saved to S3 (simulated via LocalStack). A script (monitor.py) triggers SNS alerts for drift thresholds.
 
-Reproducibility:
+**Reproducibility**:
 I ensured reproducibility with a requirements.txt pinning dependencies (e.g., pandas==1.5.3, scikit-learn==1.2.2), a detailed README with setup and execution instructions, and a public GitHub repository.
 
-Best Practices:
+**Best Practices**:
 I implemented unit and integration tests with pytest, enforced code style with black and flake8, and used pre-commit hooks for consistency. A Makefile simplifies commands, and GitHub Actions handles CI/CD for automated testing and deployment.
 
-Note:
+**Note**:
 All commands presented were ran on windows powershell.
