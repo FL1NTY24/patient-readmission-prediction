@@ -72,7 +72,8 @@ This section sets up MLflow to track experiments (logging parameters, metrics, a
 - Verify the "PatientReadmission" experiment with logged parameters (n_estimators, max_depth, random_state), metrics (auc_roc, precision, recall), and artifacts (random_forest_model, confusion_matrix.png).
 - Check the "Models" tab for ReadmissionModel Version 1.
 
-7. **Verify Artifacts in LocalStack:Confirm MLflow artifacts are stored in S3**:
+7. **Verify Artifacts in LocalStack**:
+- Confirm MLflow artifacts are stored in S3:
    ```powershell
    awslocal s3 ls s3://readmission-bucket/mlflow-artifacts/ --recursive
    ```
