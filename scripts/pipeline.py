@@ -92,8 +92,7 @@ def log_to_mlflow(params, model, auc_roc, precision, recall, cm_path, X_sample):
         mlflow.log_metric("recall", recall)
         mlflow.sklearn.log_model(
             sk_model=model,
-            artifact_path="model",  # Keep for compatibility
-            name="random_forest_model",  # Address deprecation
+            name="random_forest_model",  # Use only 'name' parameter
             input_example=X_sample[:5]  # Add input example
         )
         mlflow.log_artifact(cm_path)
