@@ -90,32 +90,11 @@ Wrap
 Copy
 $env:GIT_PYTHON_REFRESH = "quiet"
 3. Create pipeline.py
-Create a Prefect flow in pipeline.py to orchestrate the ML pipeline, modularizing the preprocessing, training, evaluation, and MLflow logging from mlops_project.py.
+Create a Prefect flow in pipeline.py to orchestrate the ML pipeline, modularizing the preprocessing, training, evaluation, and MLflow logging from mlops_project.py - script in main github directory.
 
 Steps:
 
-Create pipeline.py in C:\Users\GabrielF\patient-readmission-prediction with the following code:
-
-Save the file:
-powershell
-
-Collapse
-
-Wrap
-
-Copy
-cd C:\Users\GabrielF\patient-readmission-prediction
-Create pipeline.py with the above code using a text editor or:
-powershell
-
-Collapse
-
-Wrap
-
-Copy
-echo [paste the above code] > pipeline.py
-4. Start Prefect Server
-Run the Prefect server to monitor the flow execution.
+Create pipeline.py in C:\Users\<rootuserfolder>\patient-readmission-prediction with the following code:
 
 Steps:
 
@@ -147,6 +126,7 @@ Copy
 cd C:\Users\GabrielF\patient-readmission-prediction
 python pipeline.py
 Monitor execution in the Prefect UI (http://127.0.0.1:4200). Expect a flow run named “Patient Readmission Prediction Pipeline” with tasks (configure_environment, etc.) marked as completed.
+
 6. Verify Outputs
 Confirm the pipeline logged to MLflow and stored artifacts in LocalStack.
 
