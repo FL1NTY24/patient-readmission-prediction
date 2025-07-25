@@ -92,11 +92,11 @@ def log_to_mlflow(params, model, auc_roc, precision, recall, cm_path, X_sample):
         mlflow.log_metric("recall", recall)
         mlflow.sklearn.log_model(
             sk_model=model,
-            name="random_forest_model",  # Use only 'name' parameter
-            input_example=X_sample[:5]  # Add input example
+            name="random_forest_model",  # Model artifact path
+            input_example=X_sample[:5]  # Input example
         )
         mlflow.log_artifact(cm_path)
-        model_uri = f"runs:/{mlflow.active_run().info.run_id}/model"
+        model_uri = f"runs:/{mlflow.active_run().info.run_id}/random_forest_model"
         mlflow.register_model(model_uri, "ReadmissionModel")
 
 @flow(name="Patient Readmission Prediction Pipeline")
