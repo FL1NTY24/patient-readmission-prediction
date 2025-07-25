@@ -8,15 +8,15 @@ This section sets up MLflow to track experiments (logging parameters, metrics, a
    ```
 - Requirements:
   
-  mlflow==2.17.0
+  + mlflow==2.17.0
   
-  scikit-learn==1.2.2
+  + scikit-learn==1.2.2
   
-  pandas==1.5.3
+  + pandas==1.5.3
   
-  matplotlib==3.7.5
+  + matplotlib==3.7.5
   
-  seaborn==0.13.2
+  + seaborn==0.13.2
 
 - Verify:
   ```powershell
