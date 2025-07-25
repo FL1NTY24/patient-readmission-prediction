@@ -109,3 +109,10 @@ This step involves creating a Prefect flow to automate the ML pipeline from mlop
   
 - Prefect UI: Open http://127.0.0.1:4200.
   Verify the flow run completed successfully with all tasks (preprocessing, training, etc.) marked as completed.
+
+7. **To schedule daily runs (OPTIONAL)**:
+  ```powershell
+  prefect deployment build pipeline.py:readmission_pipeline -n readmission-pipeline -i "interval 86400"
+  prefect deployment apply readmission_pipeline-deployment.yaml
+  prefect agent start
+  ```
