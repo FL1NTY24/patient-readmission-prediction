@@ -47,8 +47,9 @@ This section sets up MLflow to track experiments (logging parameters, metrics, a
    cd C:\Users\<rootuserfolder>
    mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 127.0.0.1 --port 5000
    ```
-   ML Flow will launch locally on http://127.0.0.1:5000 - therefore, direct yourself to the following on a broswer of your choice - and then open a new tab on Windows Powershell to continue with the rest of the commands.
-   #Don't close current Windows Powershell tab#
+  ML Flow will launch locally on http://127.0.0.1:5000 - therefore, direct yourself to the following on a broswer of your choice - and then open a new tab on Windows Powershell to continue with the rest of the commands.
+
+  **Don't close current Windows Powershell tab.**
 
 5. **Run the Training Script**:
 
