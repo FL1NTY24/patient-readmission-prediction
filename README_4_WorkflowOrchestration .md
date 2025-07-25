@@ -63,7 +63,7 @@ This step involves creating a Prefect flow to automate the ML pipeline from mlop
 3. **Create pipeline.py**:
    
 - Needed to orchestrate the ML pipeline, modularizing the preprocessing, training, evaluation, and MLflow logging from mlops_project.py.
-- Script can be found in scripts folder in main github directory.
+- Script can be found in the main github directory.
 - Be sure to save the script with mlops_project.py in C:\Users\<rootuserfolder>\patient-readmission-prediction.
 
 4. **Start the Prefect server**:
