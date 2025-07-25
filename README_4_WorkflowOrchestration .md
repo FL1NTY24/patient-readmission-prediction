@@ -21,8 +21,9 @@ Collapse
 Wrap
 
 Copy
+cd C:\Users\<rootuserfolder>
 py -m pip uninstall prefect griffe -y
-py -m pip install prefect==2.14.0
+py -m pip install prefect==2.14.0 griffe==0.25.0
 Verify installation:
 powershell
 
@@ -33,29 +34,7 @@ Wrap
 Copy
 prefect --version
 Expected: 2.14.0.
-Update requirements.txt in C:\Users\GabrielF\patient-readmission-prediction:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
-echo prefect==2.14.0 >> requirements.txt
-Ensure requirements.txt contains:
-text
-
-Collapse
-
-Wrap
-
-Copy
-mlflow==2.17.0
-scikit-learn==1.2.2
-pandas==1.5.3
-matplotlib==3.7.5
-seaborn==0.13.2
-prefect==2.14.0
 2. Verify MLflow and LocalStack Setup
 Ensure the MLflow server and LocalStack are running to support the Prefect flow.
 
@@ -69,7 +48,6 @@ Collapse
 Wrap
 
 Copy
-cd C:\Users\GabrielF
 mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 127.0.0.1 --port 5000
 Verify: Open http://127.0.0.1:5000 in a browser to see the MLflow UI.
 Start LocalStack (if not running):
