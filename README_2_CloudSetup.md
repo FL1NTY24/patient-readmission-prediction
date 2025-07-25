@@ -105,6 +105,7 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
    $env:AWS_ENDPOINT_URL = "http://127.0.0.1:4566"
    awslocal s3 ls
    ```
+- The "awslocal s3 ls" command shouldn't display / output anything as no buckets have been created yet, but it shouldn't give an error either.
 
 6. **Set Up Terraform Scripts**:
 
