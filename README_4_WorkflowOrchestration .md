@@ -37,7 +37,7 @@ This step involves creating a Prefect flow to automate the ML pipeline from mlop
   ```powershell
   mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 127.0.0.1 --port 5000
   ```
- Verify: Open http://127.0.0.1:5000 in a browser to see the MLflow UI.
+  Verify: Open http://127.0.0.1:5000 in a browser to see the MLflow UI.
 
 - Start LocalStack (if not running):
   ```powershell
