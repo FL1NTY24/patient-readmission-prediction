@@ -21,7 +21,8 @@ Collapse
 Wrap
 
 Copy
-pip install prefect==2.14.0
+py -m pip uninstall prefect griffe -y
+py -m pip install prefect==2.14.0
 Verify installation:
 powershell
 
