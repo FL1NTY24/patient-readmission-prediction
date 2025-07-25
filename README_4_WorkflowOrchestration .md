@@ -6,13 +6,13 @@ This step involves creating a Prefect flow to automate the ML pipeline from mlop
 
 - Existing Setup:
   
-  mlops_project.py successfully logs parameters, metrics, artifacts, and registers the ReadmissionModel in MLflow.
+  + mlops_project.py successfully logs parameters, metrics, artifacts, and registers the ReadmissionModel in MLflow.
   
-  MLflow server runs at http://127.0.0.1:5000 with SQLite backend (sqlite:///mlflow.db) and LocalStack S3 artifact storage (s3://readmission-bucket/mlflow-artifacts).
+  + MLflow server runs at http://127.0.0.1:5000 with SQLite backend (sqlite:///mlflow.db) and LocalStack S3 artifact storage (s3://readmission-bucket/mlflow-artifacts).
   
-  diabetes_data.csv is in C:\Users\<rootuserfolder>\patient-readmission-prediction\data.
+  + diabetes_data.csv is in C:\Users\<rootuserfolder>\patient-readmission-prediction\data.
   
-  LocalStack is running with readmission-bucket for S3 storage.
+  + LocalStack is running with readmission-bucket for S3 storage.
 
 1. **Install Prefect**:
    
@@ -53,7 +53,7 @@ This step involves creating a Prefect flow to automate the ML pipeline from mlop
   ```powershell
   awslocal s3 ls s3://readmission-bucket/
    ```
-Expected: PRE data/ PRE mlflow-artifacts/.
+  Expected: PRE data/ PRE mlflow-artifacts/.
 
 - Silence Git Warning (optional, for cleaner logs):
   ```powershell
