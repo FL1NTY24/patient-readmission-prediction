@@ -119,10 +119,7 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
 
    provider.tf: Configures AWS provider with LocalStack toggle.
 
-- Ensure data/diabetes_data.csv exists in the data/ directory.
-   ```powershell
-   dir data\diabetes_data.csv
-   ```
+- Ensure data / diabetes_data.csv exists in the data directory - C:\Users\<rootuserfolder>\patient-readmission-prediction\data.
 
 7. **Test with LocalStack**:
 
@@ -135,8 +132,6 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
    ```powershell
    cd patient-readmission-prediction/infrastructure
    ```
-
-
 
 - Initialize Terraform:
    ```powershell
