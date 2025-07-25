@@ -53,7 +53,8 @@ This section sets up MLflow to track experiments (logging parameters, metrics, a
 
 5. **Run the Training Script**:
 
-- The python training script can be found in the main github directory.
+- All python scripts needed for this project can be found in the "scripts" folder in the main github directory.
+- Note: all scripts need to be downloaded and present in your local path: C:\Users\<rootuserfolder>\patient-readmission-prediction
 - Execute the training script to log experiments and register the model:
    ```powershell
    cd C:\Users\<rootuserfolder>\patient-readmission-prediction
