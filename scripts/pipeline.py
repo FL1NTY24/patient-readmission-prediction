@@ -90,10 +90,12 @@ def log_to_mlflow(params, model, auc_roc, precision, recall, cm_path, X_sample):
         mlflow.log_metric("auc_roc", auc_roc)
         mlflow.log_metric("precision", precision)
         mlflow.log_metric("recall", recall)
+        # Convert integer columns to float to avoid schema warnings
+        X_sample_float = X_sample[:5].astype(np.float64)
         mlflow.sklearn.log_model(
             sk_model=model,
-            name="random_forest_model",  # Model artifact path
-            input_example=X_sample[:5]  # Input example
+            name="random_forest_model",
+            input_example=X_sample_float
         )
         mlflow.log_artifact(cm_path)
         model_uri = f"runs:/{mlflow.active_run().info.run_id}/random_forest_model"
