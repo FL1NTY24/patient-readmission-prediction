@@ -4,7 +4,7 @@ This section sets up MLflow to track experiments (logging parameters, metrics, a
 
 1. **Install MLflow and Dependencies**:
    ```powershell
-   pip install mlflow scikit-learn pandas matplotlib seaborn
+   py -m pip install mlflow scikit-learn pandas matplotlib seaborn
    ```
 - Requirements:
   
