@@ -118,26 +118,25 @@ Start MLflow Server (If not running already):
 
 mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 127.0.0.1 --port 5000
 Verifies: MLflow UI is accessible at http://127.0.0.1:5000, and ReadmissionModel is in the Production stage.
+
+Run transition_model - make sure the latest model version is correct in script
+
 Test FastAPI Locally:
-powershell
 
-Collapse
-
-Wrap
-
-Copy
 cd C:\Users\<rootuserfolder>\patient-readmission-prediction
 uvicorn app:app --host 0.0.0.0 --port 8000
 Open http://127.0.0.1:8000/docs in a browser to view the Swagger UI.
+Open a new powershell tab.
 Test the /predict endpoint:
 
-curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"age": 70.0, "gender": 1, "race": 2, "time_in_hospital": 5, "num_lab_procedures": 40, "num_medications": 15, "diabetesMed": 1}'
+cd C:\Users\<rootuserfolder>\patient-readmission-prediction
+Invoke-WebRequest -Uri "http://127.0.0.1:8000/predict" -Method POST -Headers @{ "Content-Type" = "application/json" } -Body '{"age": 70.0, "gender": 1, "race": 2, "time_in_hospital": 5, "num_lab_procedures": 40, "num_medications": 15, "diabetesMed": 1}'
 Expected Output: {"readmission_probability": <float>} (e.g., {"readmission_probability": 0.73})
 Test the /health endpoint:
 
-curl -X GET "http://127.0.0.1:8000/health"
+Invoke-WebRequest -Uri "http://127.0.0.1:8000/health"
 Expected Output: {"status": "healthy"}
-Stop Uvicorn with Ctrl+C.
+Stop Uvicorn (in previous powershell tab) with Ctrl+C.
 Build and Test Docker Container:
 
 docker build -t readmission-prediction:latest .
