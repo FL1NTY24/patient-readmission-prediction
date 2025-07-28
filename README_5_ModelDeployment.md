@@ -136,18 +136,18 @@ Test the /health endpoint:
 
 Invoke-WebRequest -Uri "http://127.0.0.1:8000/health"
 Expected Output: {"status": "healthy"}
-Stop Uvicorn (in previous powershell tab) with Ctrl+C.
+Stop Uvicorn with Ctrl+C.
 Build and Test Docker Container:
 
 docker build -t readmission-prediction:latest .
 docker run -d -p 8000:8000 --env AWS_ENDPOINT_URL=http://host.docker.internal:4566 readmission-prediction:latest
 Test the /predict endpoint:
 
-curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"age": 70.0, "gender": 1, "race": 2, "time_in_hospital": 5, "num_lab_procedures": 40, "num_medications": 15, "diabetesMed": 1}'
+Invoke-WebRequest -Uri "http://127.0.0.1:8000/predict" -Method POST -Headers @{ "Content-Type" = "application/json" } -Body '{"age": 70.0, "gender": 1, "race": 2, "time_in_hospital": 5, "num_lab_procedures": 40, "num_medications": 15, "diabetesMed": 1}'
 Expected Output: {"readmission_probability": <float>}
 Test the /health endpoint:
 
-curl -X GET "http://127.0.0.1:8000/health"
+Invoke-WebRequest -Uri "http://127.0.0.1:8000/health" -Method GET
 Expected Output: {"status": "healthy"}
 Stop the container:
 
