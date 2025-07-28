@@ -90,20 +90,31 @@ Verify the FastAPI application and Docker container locally to ensure functional
 Steps:
 
 Save Files: Save app.py, Dockerfile, requirements.txt, ecs_task_definition.json, and deploy_ecs.sh in C:\Users\<rootuserfolder>\patient-readmission-prediction.
-Make deploy_ecs.sh Executable (on Windows, use Git Bash or WSL):
+Make deploy_ecs.sh Executable (on Windows, use WSL):
 
 cd C:\Users\<rootuserfolder>\patient-readmission-prediction
+wsl
 chmod +x deploy_ecs.sh
+
+Verify:
+ls -l deploy_ecs.sh
+
+Expected output: -rwxrwxrwx
+
+Exit WSL:
+
+exit
+
 Install Dependencies:
 
 cd C:\Users\<rootuserfolder>\patient-readmission-prediction
-pip install -r requirements.txt
-Verifies: fastapi==0.115.0, uvicorn==0.31.0, and other dependencies are installed.
+py -m pip install fastapi==0.99.1 uvicorn==0.30.6
+Verifies: fastapi==0.99.1 uvicorn==0.30.6.
 Start LocalStack:
 
 docker run -d -p 4566:4566 -p 4510-4559:4510-4559 --env SERVICES=s3,ecr,ecs,cloudwatch --env HOSTNAME_EXTERNAL=localhost --env S3_PATH_STYLE=1 localstack/localstack
 Verifies: LocalStack is running with S3, ECR, ECS, and CloudWatch services.
-Start MLflow Server:
+Start MLflow Server (If not running already):
 
 cd C:\Users\<rootuserfolder>
 mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 127.0.0.1 --port 5000
