@@ -116,7 +116,7 @@ docker run -d -p 4566:4566 -p 4510-4559:4510-4559 --env SERVICES=s3,ecr,ecs,clou
 Verifies: LocalStack is running with S3, ECR, ECS, and CloudWatch services.
 Start MLflow Server (If not running already):
 
-mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 127.0.0.1 --port 5000
+py -m mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 0.0.0.0 --port 5000
 Verifies: MLflow UI is accessible at http://127.0.0.1:5000, and ReadmissionModel is in the Production stage.
 
 Run transition_model - make sure the latest model version is correct in script
