@@ -110,7 +110,9 @@ Install Dependencies:
 cd C:\Users\<rootuserfolder>
 py -m pip install fastapi==0.99.1 uvicorn==0.30.6
 Verifies: fastapi==0.99.1 uvicorn==0.30.6.
-Start LocalStack:
+Start LocalStack (if not already running):
+
+cd C:\Users\<rootuserfolder>\patient-readmission-prediction
 
 docker run -d -p 4566:4566 -p 4510-4559:4510-4559 --env SERVICES=s3,ecr,ecs,cloudwatch --env HOSTNAME_EXTERNAL=localhost --env S3_PATH_STYLE=1 localstack/localstack
 Verifies: LocalStack is running with S3, ECR, ECS, and CloudWatch services.
@@ -125,7 +127,6 @@ python transition_model.py
 
 Test FastAPI Locally:
 
-cd C:\Users\<rootuserfolder>\patient-readmission-prediction
 uvicorn app:app --host 0.0.0.0 --port 8000
 Open http://127.0.0.1:8000/docs in a browser to view the Swagger UI.
 Open a new powershell tab.
