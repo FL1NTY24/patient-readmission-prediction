@@ -8,10 +8,10 @@ import os
 
 os.environ["AWS_ACCESS_KEY_ID"] = "test"
 os.environ["AWS_SECRET_ACCESS_KEY"] = "test"
-os.environ["AWS_ENDPOINT_URL"] = "http://host.docker.internal:4566"
+os.environ["AWS_ENDPOINT_URL"] = "http://127.0.0.1:4566"
 os.environ["AWS_S3_FORCE_PATH_STYLE"] = "true"
 os.environ["GIT_PYTHON_REFRESH"] = "quiet"
-mlflow.set_tracking_uri("http://host.docker.internal:5000")
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
 
 app = FastAPI(title="Patient Readmission Prediction API")
 
