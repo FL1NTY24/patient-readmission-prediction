@@ -138,6 +138,8 @@ Test the /health endpoint:
 
 Invoke-WebRequest -Uri "http://127.0.0.1:8000/health"
 Expected Output: {"status": "healthy"}
+
+On previous tab.
 Stop Uvicorn with Ctrl+C.
 Build and Test Docker Container:
 
