@@ -45,7 +45,7 @@ This section sets up MLflow to track experiments (logging parameters, metrics, a
 
 - Launch the MLflow server with a SQLite backend and LocalStack S3 artifact storage:
    ```powershell
-   mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 127.0.0.1 --port 5000
+   py -m mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 0.0.0.0 --port 5000
    ```
   ML Flow will launch locally on http://127.0.0.1:5000 - therefore, direct yourself to the following on a broswer of your choice - and then open a new tab on Windows Powershell to continue with the rest of the commands.
 
