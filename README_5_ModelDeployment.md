@@ -121,6 +121,8 @@ Verifies: MLflow UI is accessible at http://127.0.0.1:5000, and ReadmissionModel
 
 Run transition_model - make sure the latest model version is correct in script
 
+python transition_model.py
+
 Test FastAPI Locally:
 
 cd C:\Users\<rootuserfolder>\patient-readmission-prediction
