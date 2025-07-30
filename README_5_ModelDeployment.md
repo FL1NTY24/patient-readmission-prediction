@@ -121,9 +121,16 @@ Start MLflow Server (If not running already):
 py -m mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 0.0.0.0 --port 5000
 Verifies: MLflow UI is accessible at http://127.0.0.1:5000, and ReadmissionModel is in the Production stage.
 
-Run transition_model - make sure the latest model version is correct in script
+Run transition_model - make sure the latest model version is correct in script (model version found at: http://127.0.0.1:5000/#/models)
 
 python transition_model.py
+
+Change app.py - line 24
+
+    model = mlflow.pyfunc.load_model("models:/ReadmissionModel/8")
+
+    the number 8 must be the latest version of the ml model.
+
 
 Test FastAPI Locally:
 
