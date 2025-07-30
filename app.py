@@ -52,7 +52,7 @@ async def predict(data: PredictionInput):
         logger.debug(f"Input DataFrame: {input_df}")
         prediction = model.predict(input_df)
         logger.debug(f"Prediction: {prediction}")
-        return {"prediction": prediction.tolist()}
+        return {"readmission_probability": float(prediction[0])}
     except Exception as e:
         logger.error(f"Prediction failed: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
