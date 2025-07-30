@@ -21,7 +21,7 @@ os.environ["MLFLOW_TRACKING_URI"] = "http://host.docker.internal:5000"
 model = None
 try:
     logger.debug("Loading MLflow model")
-    model = mlflow.pyfunc.load_model("models:/ReadmissionModel/6")
+    model = mlflow.pyfunc.load_model("models:/ReadmissionModel/8")
     logger.debug("Model loaded successfully")
 except Exception as e:
     logger.error(f"Failed to load model: {str(e)}")
