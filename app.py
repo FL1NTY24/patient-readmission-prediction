@@ -32,7 +32,7 @@ class PredictionInput(BaseModel):
 model = None
 try:
     logger.debug("Loading MLflow model")
-    model = mlflow.pyfunc.load_model("models:/ReadmissionModel/Production")
+    model = mlflow.pyfunc.load_model("models:/ReadmissionModel/8")
     logger.debug("Model loaded successfully")
 except Exception as e:
     logger.error(f"Failed to load model: {str(e)}")
