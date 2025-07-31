@@ -155,7 +155,7 @@ cd C:\Users\GabrielF\patient-readmission-prediction
 Remove-Item -Force mlflow.db -ErrorAction SilentlyContinue
 New-Item -ItemType File mlflow.db
 
-Close any previous MLFlow runs with ctrl+C
+Close any previous MLFlow runs with ctrl+C (first windows powershell tab) + Close browser UI tab
 
 Run MLflow Server on Host:
 py -m mlflow server `
