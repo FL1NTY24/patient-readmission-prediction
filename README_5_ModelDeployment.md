@@ -150,10 +150,6 @@ Expected Output: {"status": "healthy"}
 On previous tab.
 Stop Uvicorn with Ctrl+C.
 
-Stop and Remove MLflow Container (if running):
-docker stop mlflow
-docker rm mlflow
-
 Create a New mlflow.db:
 cd C:\Users\GabrielF\patient-readmission-prediction
 Remove-Item -Force mlflow.db -ErrorAction SilentlyContinue
