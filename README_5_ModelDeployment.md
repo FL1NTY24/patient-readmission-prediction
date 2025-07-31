@@ -170,10 +170,12 @@ py -m mlflow server `
 Test MLflow on Host:
 curl http://127.0.0.1:5000
 
+New Windows Tab
+
 Run Pipeline Scripts:
 cd C:\Users\GabrielF\patient-readmission-prediction
 python pipeline.py
-python transition_model.py (version 1 code:)
+python transition_model.py (change model version to 1)
 
 Verify Artifacts:
 awslocal s3 ls s3://readmission-bucket/mlflow-artifacts/ --recursive
@@ -184,11 +186,6 @@ Open http://127.0.0.1:5000 in a browser.
 Confirm ReadmissionModel version 1 is in Production with the correct artifact path (e.g., s3://readmission-bucket/mlflow-artifacts/1/models/m-<new_id>/artifacts/).
 
 Update app.py model number
-
-Stop and Remove Current Container:
-docker ps
-docker stop <containerid>
-docker rm <containerid>
 
 Build the Image:
 cd C:\Users\GabrielF\patient-readmission-prediction
