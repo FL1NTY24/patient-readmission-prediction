@@ -150,24 +150,53 @@ Expected Output: {"status": "healthy"}
 On previous tab.
 Stop Uvicorn with Ctrl+C.
 
-PS C:\Users\GabrielF\patient-readmission-prediction> netstat -aon | findstr :8000
-  TCP    0.0.0.0:8000           0.0.0.0:0              LISTENING       28436
-  TCP    [::]:8000              [::]:0                 LISTENING       28436
-  TCP    [::1]:8000             [::]:0                 LISTENING       3080
-PS C:\Users\GabrielF\patient-readmission-prediction> taskkill /PID 28436 /F
-SUCCESS: The process with PID 28436 has been terminated.
+Stop and Remove MLflow Container (if running):
+docker stop mlflow
+docker rm mlflow
 
-Stop and Remove Existing Containers:
-powershelldocker ps -a
-docker stop <container_id>
-docker rm <container_id>
+Create a New mlflow.db:
+cd C:\Users\GabrielF\patient-readmission-prediction
+Remove-Item -Force mlflow.db -ErrorAction SilentlyContinue
+New-Item -ItemType File mlflow.db
 
-Remember app model name change once latest model is run and in production.
+Close any previous MLFlow runs with ctrl+C
 
-Build and Test Docker Container:
+Run MLflow Server on Host:
+py -m mlflow server `
+--backend-store-uri sqlite:///mlflow.db `
+--default-artifact-root s3://readmission-bucket/mlflow-artifacts `
+--host 0.0.0.0 --port 5000
 
+Test MLflow on Host:
+curl http://127.0.0.1:5000
+
+Run Pipeline Scripts:
+cd C:\Users\GabrielF\patient-readmission-prediction
+python pipeline.py
+python transition_model.py (version 1 code:)
+
+Verify Artifacts:
+awslocal s3 ls s3://readmission-bucket/mlflow-artifacts/ --recursive
+
+Check MLflow UI:
+
+Open http://127.0.0.1:5000 in a browser.
+Confirm ReadmissionModel version 1 is in Production with the correct artifact path (e.g., s3://readmission-bucket/mlflow-artifacts/1/models/m-<new_id>/artifacts/).
+
+Update app.py model number
+
+Stop and Remove Current Container:
+docker ps
+docker stop <containerid>
+docker rm <containerid>
+
+Build the Image:
+cd C:\Users\GabrielF\patient-readmission-prediction
 docker build -t readmission-prediction:latest .
+
+Run Container with Correct Environment Variables:
 docker run -d -p 8000:8000 `
+--network readmission-network `
 --env AWS_ENDPOINT_URL=http://host.docker.internal:4566 `
 --env MLFLOW_TRACKING_URI=http://host.docker.internal:5000 `
 --env AWS_S3_FORCE_PATH_STYLE=true `
@@ -176,14 +205,35 @@ docker run -d -p 8000:8000 `
 --env AWS_DEFAULT_REGION=us-east-1 `
 readmission-prediction:latest
 
-Test the /predict endpoint:
+Get New Container ID:
+docker ps
 
-Invoke-WebRequest -Uri "http://127.0.0.1:8000/predict" -Method POST -Headers @{ "Content-Type" = "application/json" } -Body '{"age": 70.0, "gender": 1, "race": 2, "time_in_hospital": 5, "num_lab_procedures": 40, "num_medications": 15, "diabetesMed": 1}'
-Expected Output: {"readmission_probability": <float>}
-Test the /health endpoint:
+Test Connectivity from Container:
+docker exec -it <new_container_id> sh
+Then:
+curl http://host.docker.internal:4566
+curl http://host.docker.internal:5000
 
+
+Exit the shell:
+exit
+
+Test API Endpoints
+
+Health Endpoint:
 Invoke-WebRequest -Uri "http://127.0.0.1:8000/health" -Method GET
-Expected Output: {"status": "healthy"}
+
+Expected Output:
+{"status": "healthy"}
+
+
+
+Predict Endpoint:
+Invoke-WebRequest -Uri "http://127.0.0.1:8000/predict" -Method POST -Headers @{ "Content-Type" = "application/json" } -Body '{"age": 70.0, "gender": 1, "race": 2, "time_in_hospital": 5, "num_lab_procedures": 40, "num_medications": 15, "diabetesMed": 1}'
+
+Expected Output:
+{"readmission_probability": <float_value>}
+
 Stop the container:
 
 docker ps
