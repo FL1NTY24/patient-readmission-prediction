@@ -149,10 +149,33 @@ Expected Output: {"status": "healthy"}
 
 On previous tab.
 Stop Uvicorn with Ctrl+C.
+
+PS C:\Users\GabrielF\patient-readmission-prediction> netstat -aon | findstr :8000
+  TCP    0.0.0.0:8000           0.0.0.0:0              LISTENING       28436
+  TCP    [::]:8000              [::]:0                 LISTENING       28436
+  TCP    [::1]:8000             [::]:0                 LISTENING       3080
+PS C:\Users\GabrielF\patient-readmission-prediction> taskkill /PID 28436 /F
+SUCCESS: The process with PID 28436 has been terminated.
+
+Stop and Remove Existing Containers:
+powershelldocker ps -a
+docker stop <container_id>
+docker rm <container_id>
+
+Remember app model name change once latest model is run and in production.
+
 Build and Test Docker Container:
 
 docker build -t readmission-prediction:latest .
-docker run -d -p 8000:8000 --env AWS_ENDPOINT_URL=http://host.docker.internal:4566 readmission-prediction:latest
+docker run -d -p 8000:8000 `
+--env AWS_ENDPOINT_URL=http://host.docker.internal:4566 `
+--env MLFLOW_TRACKING_URI=http://host.docker.internal:5000 `
+--env AWS_S3_FORCE_PATH_STYLE=true `
+--env AWS_ACCESS_KEY_ID=test `
+--env AWS_SECRET_ACCESS_KEY=test `
+--env AWS_DEFAULT_REGION=us-east-1 `
+readmission-prediction:latest
+
 Test the /predict endpoint:
 
 Invoke-WebRequest -Uri "http://127.0.0.1:8000/predict" -Method POST -Headers @{ "Content-Type" = "application/json" } -Body '{"age": 70.0, "gender": 1, "race": 2, "time_in_hospital": 5, "num_lab_procedures": 40, "num_medications": 15, "diabetesMed": 1}'
