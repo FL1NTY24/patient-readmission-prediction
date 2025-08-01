@@ -207,7 +207,6 @@ Then:
 curl http://host.docker.internal:4566
 curl http://host.docker.internal:5000
 
-
 Exit the shell:
 exit
 
