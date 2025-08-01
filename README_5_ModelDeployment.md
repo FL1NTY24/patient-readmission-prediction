@@ -71,11 +71,8 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   docker network inspect readmission-network
   ```
 - Look for:
-  
-  {
-      "Name": "localstack",
-    }
-  }
+
+  "Name": "localstack",
 
 4. **Recreate S3 Bucket** Since restarting LocalStack may reset its state:
   ```powershell
