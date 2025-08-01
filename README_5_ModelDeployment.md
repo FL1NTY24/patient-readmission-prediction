@@ -58,14 +58,14 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 5. **Recreate mlflow.db**:
   ```powershell
-  cd C:\Users\GabrielF\patient-readmission-prediction
+  cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   Remove-Item -Force mlflow.db -ErrorAction SilentlyContinue
   New-Item -ItemType File mlflow.db
   ```
 
 6. **Restart MLflow Server**:
   ```powershell
-  cd C:\Users\GabrielF\patient-readmission-prediction
+  cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   py -m mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 0.0.0.0 --port 5000
   ```
 
