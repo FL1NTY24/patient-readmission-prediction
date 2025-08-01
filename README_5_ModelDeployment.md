@@ -46,24 +46,53 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 - Verifies: fastapi==0.99.1, uvicorn==0.30.6.
 
-3. **Start LocalStack** (if not already running):
+3. **Restart LocalStack**:
+- Stop and Remove LocalStack Container:
   ```powershell
   cd C:\Users\<rootuserfolder>\patient-readmission-prediction
-  docker run -d -p 4566:4566 -p 4510-4559:4510-4559 --network readmission-network --network-alias localstack --name localstack --env SERVICES=s3,ecr,ecs,cloudwatch --env HOSTNAME_EXTERNAL=localstack --env S3_PATH_STYLE=1 localstack/localstack
+  docker ps
+  docker stop <containerid>
+  docker rm <containerid>
   ```
-- Verifies: LocalStack is running with S3, ECR, ECS, and CloudWatch services.
+- Restart LocalStack on readmission-network:
+  ```powershell
+  docker run -d -p 4566:4566 -p 4510-4559:4510-4559 `
+  --network readmission-network `
+  --network-alias localstack `
+  --name localstack `
+  --env SERVICES=s3,ecr,ecs,cloudwatch `
+  --env HOSTNAME_EXTERNAL=localstack `
+  --env S3_PATH_STYLE=1 `
+  localstack/localstack
+  ```
+  
+- Verify Network:
+  ```powershell
+  docker network inspect readmission-network
+  ```
+- Look for:
+  
+  {
+      "Name": "localstack",
+    }
+  }
 
-4. **Reset MLflow and Rerun Pipeline**:
+4. **Recreate S3 Bucket** Since restarting LocalStack may reset its state:
+  ```powershell
+  awslocal s3 mb s3://readmission-bucket
+  ```
+
+5. **Reset MLflow and Rerun Pipeline**:
 - Stop MLflow Server: In the PowerShell tab running the MLflow server, press Ctrl+C to stop it. Close the browser tab with the MLflow UI (http://127.0.0.1:5000).
 
-5. **Recreate mlflow.db**:
+6. **Recreate mlflow.db**:
   ```powershell
   cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   Remove-Item -Force mlflow.db -ErrorAction SilentlyContinue
   New-Item -ItemType File mlflow.db
   ```
 
-6. **Restart MLflow Server**:
+7. **Restart MLflow Server**:
   ```powershell
   cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   py -m mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 0.0.0.0 --port 5000
@@ -71,19 +100,19 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 - Verifies: MLflow UI is accessible at http://127.0.0.1:5000.
 
-7. **Test MLflow Server**:
+8. **Test MLflow Server**:
 - Open a new windows powershell tab.
   ```powershell
   curl http://127.0.0.1:5000
   ```
 
-8. **Run Pipeline Script**:
+9. **Run Pipeline Script**:
   ```powershell
   cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   python pipeline.py
   ```
 
-9. **Run transition_model.py** (Update Model Version):
+10. **Run transition_model.py** (Update Model Version):
 
 - Check the latest model version in the MLflow UI (http://127.0.0.1:5000/#/models).
 - Update transition_model.py to set the latest version (Should be Version 1) to Production:
@@ -92,35 +121,35 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   python transition_model.py
   ```
 
-10. **Verify Artifacts**:
+11. **Verify Artifacts**:
   ```powershell
   awslocal s3 ls s3://readmission-bucket/mlflow-artifacts/ --recursive
   ```
-11. **Check MLflow UI**:
+12. **Check MLflow UI**:
 - Open http://127.0.0.1:5000 in a browser. Confirm ReadmissionModel version 1 is in Production with the artifact path matching the pipeline.py output (e.g., s3://readmission-bucket/mlflow-artifacts/1/models/<new_model_id>/artifacts).
   
-12. **Update app.py Model Version**:
+13. **Update app.py Model Version**:
     
 - Edit line 36 in app.py to load the latest Production model version (e.g., 1):
 - "model = mlflow.sklearn.load_model("models:/ReadmissionModel/1")"
 
-13. **Build the Image**:
+14. **Build the Image**:
   ```powershell
   cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   docker build -t readmission-prediction:latest .
   ```
 
-14. **Run Container with Correct Environment Variables**:
+15. **Run Container with Correct Environment Variables**:
   ```powershell
   docker run -d -p 8000:8000 --network readmission-network --name fastapi --env AWS_ENDPOINT_URL=http://localstack:4566 --env MLFLOW_TRACKING_URI=http://host.docker.internal:5000 --env AWS_S3_FORCE_PATH_STYLE=true --env AWS_ACCESS_KEY_ID=test --env AWS_SECRET_ACCESS_KEY=test --env AWS_DEFAULT_REGION=us-east-1 readmission-prediction:latest
   ```
 
-15. **Get New Container ID**:
+16. **Get New Container ID**:
   ```powershell
   docker ps
   ```
 
-16. **Test Connectivity from Container**:
+17. **Test Connectivity from Container**:
   ```powershell
   docker exec -it <new_container_id> sh
   ```
@@ -130,7 +159,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   exit
   ```
 
-17. **Test API Endpoints**:
+18. **Test API Endpoints**:
 
 - Health Endpoint:
   ```powershell
@@ -143,13 +172,13 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   ```
 - Expected Output: {"readmission_probability": <float_value>} (e.g., {"readmission_probability": 0.5325880099359565})
 
-18. **Stop Container** (after testing):
+19. **Stop Container** (after testing):
   ```powershell
   docker stop <new_container_id>
   docker rm <new_container_id>
   ```
 
-19. **Deploy to ECS**:
+20. **Deploy to ECS**:
 
 - Run Deployment Script:
   ```powershell
@@ -169,7 +198,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   
 - Expected Output: {"readmission_probability": <float_value>}
 
-20. **Troubleshooting** (if needed):
+21. **Troubleshooting** (if needed):
 
 - Check ECS Service Status:
   ```powershell
