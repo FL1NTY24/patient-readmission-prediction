@@ -72,6 +72,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 - Verifies: MLflow UI is accessible at http://127.0.0.1:5000.
 
 7. **Test MLflow Server**:
+- Open a new windows powershell tab.
   ```powershell
   curl http://127.0.0.1:5000
   ```
