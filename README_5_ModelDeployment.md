@@ -163,10 +163,10 @@ py -m mlflow server `
 --default-artifact-root s3://readmission-bucket/mlflow-artifacts `
 --host 0.0.0.0 --port 5000
 
+New Tab:
+
 Test MLflow on Host:
 curl http://127.0.0.1:5000
-
-New Windows Tab
 
 Run Pipeline Scripts:
 cd C:\Users\GabrielF\patient-readmission-prediction
@@ -190,7 +190,7 @@ docker build -t readmission-prediction:latest .
 Run Container with Correct Environment Variables:
 docker run -d -p 8000:8000 `
 --network readmission-network `
---env AWS_ENDPOINT_URL=http://host.docker.internal:4566 `
+--env AWS_ENDPOINT_URL=http://localstack:4566 `
 --env MLFLOW_TRACKING_URI=http://host.docker.internal:5000 `
 --env AWS_S3_FORCE_PATH_STYLE=true `
 --env AWS_ACCESS_KEY_ID=test `
