@@ -79,6 +79,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 8. **Run Pipeline Script**:
   ```powershell
+  cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   python pipeline.py
   ```
 
