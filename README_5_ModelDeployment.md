@@ -53,45 +53,73 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   ```
 - Verifies: LocalStack is running with S3, ECR, ECS, and CloudWatch services.
 
-4. **Start MLflow Server** (if not already running):
+4. **Reset MLflow and Rerun Pipeline**:
+- Stop MLflow Server: In the PowerShell tab running the MLflow server, press Ctrl+C to stop it. Close the browser tab with the MLflow UI (http://127.0.0.1:5000).
+
+5. **Recreate mlflow.db**:
   ```powershell
+  cd C:\Users\GabrielF\patient-readmission-prediction
+  Remove-Item -Force mlflow.db -ErrorAction SilentlyContinue
+  New-Item -ItemType File mlflow.db
+  ```
+
+6. **Restart MLflow Server**:
+  ```powershell
+  cd C:\Users\GabrielF\patient-readmission-prediction
   py -m mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root s3://readmission-bucket/mlflow-artifacts --host 0.0.0.0 --port 5000
   ```
 
 - Verifies: MLflow UI is accessible at http://127.0.0.1:5000.
 
-5. **Run transition_model.py** (Update Model Version):
+7. **Test MLflow Server**:
+  ```powershell
+  curl http://127.0.0.1:5000
+  ```
+
+8. **Run Pipeline Script**:
+  ```powershell
+  python pipeline.py
+  ```
+
+9. **Run transition_model.py** (Update Model Version):
 
 - Check the latest model version in the MLflow UI (http://127.0.0.1:5000/#/models).
-- Update transition_model.py to set the latest version (e.g., 1) to Production:
+- Update transition_model.py to set the latest version (Should be Version 1) to Production:
 - Run:
   ```powershell
   python transition_model.py
   ```
-  
-6. **Update app.py Model Version**:
 
+10. **Verify Artifacts**:
+  ```powershell
+  awslocal s3 ls s3://readmission-bucket/mlflow-artifacts/ --recursive
+  ```
+11. **Check MLflow UI**:
+- Open http://127.0.0.1:5000 in a browser. Confirm ReadmissionModel version 1 is in Production with the artifact path matching the pipeline.py output (e.g., s3://readmission-bucket/mlflow-artifacts/1/models/<new_model_id>/artifacts).
+  
+12. **Update app.py Model Version**:
+    
 - Edit line 24 in app.py to load the latest Production model version (e.g., 1):
 - "pythonmodel = mlflow.sklearn.load_model("models:/ReadmissionModel/1")  # Update to latest version"
 
-7. **Build the Image**:
+13. **Build the Image**:
   ```powershell
   cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   docker build -t readmission-prediction:latest .
   ```
 
-8. **Run Container with Correct Environment Variables**:
+14. **Run Container with Correct Environment Variables**:
   ```powershell
   docker run -d -p 8000:8000 --network readmission-network --name fastapi --env AWS_ENDPOINT_URL=http://localstack:4566 --env MLFLOW_TRACKING_URI=http://host.docker.internal:5000 --env AWS_S3_FORCE_PATH_STYLE=true --env AWS_ACCESS_KEY_ID=test --env 
   AWS_SECRET_ACCESS_KEY=test --env AWS_DEFAULT_REGION=us-east-1 readmission-prediction:latest
   ```
 
-9. **Get New Container ID**:
+15. **Get New Container ID**:
   ```powershell
   docker ps
   ```
 
-10. **Test Connectivity from Container**:
+16. **Test Connectivity from Container**:
   ```powershell
   docker exec -it <new_container_id> sh
   ```
@@ -101,7 +129,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   exit
   ```
 
-11. **Test API Endpoints**:
+17. **Test API Endpoints**:
 
 - Health Endpoint:
   ```powershell
@@ -114,13 +142,13 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   ```
 - Expected Output: {"readmission_probability": <float_value>} (e.g., {"readmission_probability": 0.5325880099359565})
 
-12. **Stop Container** (after testing):
+18. **Stop Container** (after testing):
   ```powershell
   docker stop <new_container_id>
   docker rm <new_container_id>
   ```
 
-13. **Deploy to ECS**:
+19. **Deploy to ECS**:
 
 - Run Deployment Script:
   ```powershell
@@ -140,7 +168,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   
 - Expected Output: {"readmission_probability": <float_value>}
 
-14. **Troubleshooting** (if needed):
+20. **Troubleshooting** (if needed):
 
 - Check ECS Service Status:
   ```powershell
