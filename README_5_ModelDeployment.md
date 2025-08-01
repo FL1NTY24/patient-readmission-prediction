@@ -20,7 +20,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 1. **Make deploy_ecs.sh Executable**:
   ```powershell
-  cd C:\Users\GabrielF\patient-readmission-prediction
+  cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   ```
   ```bash
   wsl -d Ubuntu
@@ -40,7 +40,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 2. **Install Dependencies**:
   ```powershell
-  cd C:\Users\GabrielF\patient-readmission-prediction
+  cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   py -m pip install fastapi==0.99.1 uvicorn==0.30.6
   ```
 
@@ -48,7 +48,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 3. **Start LocalStack** (if not already running):
   ```powershell
-  cd C:\Users\GabrielF\patient-readmission-prediction
+  cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   docker run -d -p 4566:4566 -p 4510-4559:4510-4559 --network readmission-network --network-alias localstack --name localstack --env SERVICES=s3,ecr,ecs,cloudwatch --env HOSTNAME_EXTERNAL=localstack --env S3_PATH_STYLE=1 localstack/localstack
   ```
 - Verifies: LocalStack is running with S3, ECR, ECS, and CloudWatch services.
@@ -76,7 +76,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 7. **Build the Image**:
   ```powershell
-  cd C:\Users\GabrielF\patient-readmission-prediction
+  cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   docker build -t readmission-prediction:latest .
   ```
 
@@ -124,7 +124,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 - Run Deployment Script:
   ```powershell
-  cd C:\Users\GabrielF\patient-readmission-prediction
+  cd C:\Users\<rootuserfolder>\patient-readmission-prediction
   wsl -d Ubuntu
   ```
   ```bash
