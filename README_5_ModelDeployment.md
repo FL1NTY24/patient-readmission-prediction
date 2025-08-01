@@ -112,8 +112,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 14. **Run Container with Correct Environment Variables**:
   ```powershell
-  docker run -d -p 8000:8000 --network readmission-network --name fastapi --env AWS_ENDPOINT_URL=http://localstack:4566 --env MLFLOW_TRACKING_URI=http://host.docker.internal:5000 --env AWS_S3_FORCE_PATH_STYLE=true --env AWS_ACCESS_KEY_ID=test --env 
-  AWS_SECRET_ACCESS_KEY=test --env AWS_DEFAULT_REGION=us-east-1 readmission-prediction:latest
+  docker run -d -p 8000:8000 --network readmission-network --name fastapi --env AWS_ENDPOINT_URL=http://localstack:4566 --env MLFLOW_TRACKING_URI=http://host.docker.internal:5000 --env AWS_S3_FORCE_PATH_STYLE=true --env AWS_ACCESS_KEY_ID=test --env AWS_SECRET_ACCESS_KEY=test --env AWS_DEFAULT_REGION=us-east-1 readmission-prediction:latest
   ```
 
 15. **Get New Container ID**:
