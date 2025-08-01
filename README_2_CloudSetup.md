@@ -179,8 +179,3 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
    awslocal sns list-topics
    terraform output
    ```
-   
-- Terminate LocalStack resources to clean up the local environment (**Only terminate at the end of project**):
-   ```powershell
-   terraform destroy -var="localstack_enabled=true" -auto-approve
-   ```
