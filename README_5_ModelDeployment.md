@@ -101,8 +101,8 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   
 12. **Update app.py Model Version**:
     
-- Edit line 24 in app.py to load the latest Production model version (e.g., 1):
-- "pythonmodel = mlflow.sklearn.load_model("models:/ReadmissionModel/1")  # Update to latest version"
+- Edit line 36 in app.py to load the latest Production model version (e.g., 1):
+- "model = mlflow.sklearn.load_model("models:/ReadmissionModel/1")"
 
 13. **Build the Image**:
   ```powershell
