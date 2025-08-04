@@ -185,7 +185,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
 **Cloud Deployment Note**:
 
-Due to limitations in LocalStack's free tier, which does not fully support ECS and ECR APIs, the deployment was performed locally. The container is fully prepared for AWS ECS deployment in the Free Tier. The `ecs_task_definition.json` is configured for FARGATE with `awsvpc` networking (VPC: vpc-2bebeebf4675a6cb1, subnet: subnet-ee5741f3c6ebcfafd, security group: sg-9877088a8a7fe72fa). To deploy to AWS ECS, push the image to an AWS ECR repository, update `ecs_task_definition.json` with the ECR URI, and apply the Terraform scripts in `infrastructure/` with `localstack_enabled=false` and valid AWS credentials.
+Due to limitations in LocalStack's free tier, which does not fully support ECS and ECR APIs, the deployment was performed locally. The container is fully prepared for AWS ECS deployment in the Free Tier. The `ecs_task_definition.json` is configured for FARGATE with `awsvpc` networking (VPC: <vpc-id>, subnet: <subnet-id>, security group: <security-group-id>). To deploy to AWS ECS, push the image to an AWS ECR repository, update `ecs_task_definition.json` with the ECR URI, and apply the Terraform scripts in `infrastructure/` with `localstack_enabled=false` and valid AWS credentials.
 
 **Troubleshooting** (if needed):
 
