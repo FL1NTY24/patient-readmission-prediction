@@ -1,3 +1,10 @@
+import os
+os.environ["MLFLOW_S3_ENDPOINT_URL"] = "http://127.0.0.1:4566"
+os.environ["AWS_ACCESS_KEY_ID"] = "test"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "test"
+os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+os.environ["AWS_ENDPOINT_URL"] = "http://127.0.0.1:4566"
+os.environ["AWS_S3_FORCE_PATH_STYLE"] = "true"
 from prefect import flow, task
 import pandas as pd
 import numpy as np

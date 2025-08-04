@@ -1,5 +1,4 @@
 #!/bin/bash
-
    set -e
 
    # Environment variables
@@ -14,8 +13,16 @@
    TAG=latest
    CLUSTER_NAME=readmission-cluster
    SERVICE_NAME=readmission-service
-   SUBNET_ID=subnet-12345678  # Replace with actual subnet ID
-   SECURITY_GROUP_ID=sg-12345678  # Replace with actual security group ID
+   SUBNET_ID=subnet-12345678
+   SECURITY_GROUP_ID=sg-12345678
+
+   # Create S3 bucket
+   echo "Creating S3 bucket..."
+   awslocal s3 mb s3://readmission-bucket || echo "S3 bucket already exists"
+
+   # Create CloudWatch log group
+   echo "Creating CloudWatch log group..."
+   awslocal logs create-log-group --log-group-name readmission-logs || echo "Log group already exists"
 
    # Build Docker image
    echo "Building Docker image..."
@@ -53,4 +60,4 @@
        --task-definition readmission-task \
        --desired-count 1
 
-   echo "Deployment complete. Test the API at http://localhost:8080/predict"
+   echo "Deployment complete. Test the API at http://localhost:8000/predict"

@@ -1,34 +1,61 @@
 {
-       "family": "readmission-task",
-       "networkMode": "awsvpc",
-       "containerDefinitions": [
-           {
-               "name": "readmission-container",
-               "image": "readmission-prediction:latest",
-               "essential": true,
-               "portMappings": [
-                   {
-                       "containerPort": 8000,
-                       "hostPort": 8000,
-                       "protocol": "tcp"
-                   }
-               ],
-               "environment": [
-                   {"name": "AWS_ACCESS_KEY_ID", "value": "test"},
-                   {"name": "AWS_SECRET_ACCESS_KEY", "value": "test"},
-                   {"name": "AWS_ENDPOINT_URL", "value": "http://localhost:4566"},
-                   {"name": "AWS_S3_FORCE_PATH_STYLE", "value": "true"},
-                   {"name": "GIT_PYTHON_REFRESH", "value": "quiet"}
-               ],
-               "healthCheck": {
-                   "command": ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"],
-                   "interval": 30,
-                   "timeout": 5,
-                   "retries": 3
-               }
-           }
-       ],
-       "requiresCompatibilities": ["FARGATE"],
-       "cpu": "256",
-       "memory": "512"
-   }
+    "family": "readmission-task",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+        {
+            "name": "readmission-container",
+            "image": "readmission-prediction:latest",
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": 8000,
+                    "hostPort": 8000,
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "AWS_ACCESS_KEY_ID",
+                    "value": "test"
+                },
+                {
+                    "name": "AWS_SECRET_ACCESS_KEY",
+                    "value": "test"
+                },
+                {
+                    "name": "AWS_ENDPOINT_URL",
+                    "value": "http://localstack:4566"
+                },
+                {
+                    "name": "AWS_S3_FORCE_PATH_STYLE",
+                    "value": "true"
+                },
+                {
+                    "name": "MLFLOW_TRACKING_URI",
+                    "value": "http://host.docker.internal:5000"
+                },
+                {
+                    "name": "GIT_PYTHON_REFRESH",
+                    "value": "quiet"
+                }
+            ],
+            "healthCheck": {
+                "command": [ "CMD-SHELL", "curl -f http://localhost:8000/health || exit 1" ],
+                "interval": 30,
+                "timeout": 5,
+                "retries": 3
+            },
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "readmission-logs",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "readmission"
+                }
+            }
+        }
+    ],
+    "requiresCompatibilities": [ "FARGATE" ],
+    "cpu": "256",
+    "memory": "512"
+}
