@@ -69,7 +69,7 @@ Note: ECS is not supported in LocalStack’s free tier. When `localstack_enabled
    py -m pip install localstack awscli
    ```
 
-- Add Python Scripts to PATH (e.g., C:\Users\GabrielF\AppData\Local\Programs\Python\Python39\Scripts).
+- Add Python Scripts to PATH (e.g., C:\Users\<rootuserfolder>\AppData\Local\Programs\Python\Python39\Scripts).
   
   https://www.youtube.com/watch?v=oa7YR5GpJ0A
   
