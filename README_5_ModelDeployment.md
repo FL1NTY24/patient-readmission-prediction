@@ -10,13 +10,11 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 
   + diabetes_data.csv (UCI Diabetes 130-Hospitals Dataset) is in C:\Users\<rootuserfolder>\patient-readmission-prediction\data.
 
-  + LocalStack is running with S3, ECR, ECS, and CloudWatch services (ports 4566, 4510-4559).
-
-  + Terraform scripts in infrastructure/ provision an S3 bucket (readmission-bucket) and SNS topic.
+  + LocalStack is running with S3, ECR, ECS, CloudWatch, Logs, and EC2 services (ports 4566, 4510-4559).
 
 - Save Files:
 
-  + Save app.py, Dockerfile, requirements.txt, ecs_task_definition.json, and deploy_ecs.sh in C:\Users\<rootuserfolder>\patient-readmission-prediction.
+  + Save app.py, Dockerfile, and requirements.txt in C:\Users<rootuserfolder>\patient-readmission-prediction.
 
 1. **Make deploy_ecs.sh Executable**:
   ```powershell
@@ -60,7 +58,7 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   --network readmission-network `
   --network-alias localstack `
   --name localstack `
-  --env SERVICES=s3,ecr,ecs,cloudwatch `
+  --env SERVICES=s3,ecs,cloudwatch,logs,ec2 `
   --env HOSTNAME_EXTERNAL=localstack `
   --env S3_PATH_STYLE=1 `
   localstack/localstack
@@ -73,6 +71,8 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
 - Look for:
 
   "Name": "localstack",
+
+- Note: If ECR or ECS APIs fail due to LocalStack free-tier limitations, the deployment can be tested locally (see below).
 
 4. **Recreate S3 Bucket** Since restarting LocalStack may reset its state:
   ```powershell
@@ -156,6 +156,14 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   exit
   ```
 
+- Test Connectivity from Host (Optional):
+  ```powershell
+  curl http://127.0.0.1:4566  # LocalStack root endpoint
+  curl http://127.0.0.1:5000  # MLflow UI
+  ```
+  
+- Expected: Responses from LocalStack and MLflow UI HTML.
+
 18. **Test API Endpoints**:
 
 - Health Endpoint:
@@ -175,33 +183,17 @@ Deploy the trained ReadmissionModel (Random Forest Classifier) as a REST API usi
   docker rm <new_container_id>
   ```
 
-20. **Deploy to ECS**:
+**Cloud Deployment Note**:
 
-- Run Deployment Script:
-  ```powershell
-  cd C:\Users\<rootuserfolder>\patient-readmission-prediction
-  wsl -d Ubuntu
-  ```
-  ```bash
-  ./deploy_ecs.sh
-  exit
-  ```
-  
-- Verifies: Deployment completes with no errors.
-- Test ECS Service:
-  ```powershell
-  curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"age": 70.0, "gender": 1, "race": 2, "time_in_hospital": 5, "num_lab_procedures": 40, "num_medications": 15, "diabetesMed": 1}'
-  ```
-  
-- Expected Output: {"readmission_probability": <float_value>}
+Due to limitations in LocalStack's free tier, which does not fully support ECS and ECR APIs, the deployment was performed locally. The container is fully prepared for AWS ECS deployment in the Free Tier. The `ecs_task_definition.json` is configured for FARGATE with `awsvpc` networking (VPC: vpc-2bebeebf4675a6cb1, subnet: subnet-ee5741f3c6ebcfafd, security group: sg-9877088a8a7fe72fa). To deploy to AWS ECS, push the image to an AWS ECR repository, update `ecs_task_definition.json` with the ECR URI, and apply the Terraform scripts in `infrastructure/` with `localstack_enabled=false` and valid AWS credentials.
 
-21. **Troubleshooting** (if needed):
+**Troubleshooting** (if needed):
 
 - Check ECS Service Status:
   ```powershell
   awslocal ecs describe-services --cluster readmission-cluster --services readmission-service
   ```
 - Check Task Logs:
-  ```powershellawslocal logs describe-log-streams --log-group-name readmission-logs
+  ```powershell
   awslocal logs get-log-events --log-group-name readmission-logs --log-stream-name <stream_name>
   ```
