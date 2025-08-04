@@ -88,7 +88,7 @@ cd C:\Users\<rootuserfolder>\patient-readmission-prediction
 powershellpython pipeline.py
 
 Transition model:
-powershellpython 
+powershellpython transition_model.py
 
 Verify artifacts:
 powershellawslocal s3 ls s3://readmission-bucket/mlflow-artifacts/ --recursive
